@@ -263,34 +263,28 @@ export default function NotificationDropdown() {
   return (
     <div style={{ position: 'relative' }} ref={dropdownRef}>
       <button
-        className="btn btn-secondary btn-sm"
+        className="topbar-action-btn"
         style={{
           position: 'relative',
-          padding: '7px 9px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           cursor: 'pointer',
-          backgroundColor: isOpen ? '#f1f5f9' : undefined,
-          borderRadius: '8px',
-          transition: 'all 0.15s ease',
+          backgroundColor: isOpen ? 'var(--bg-card-hover)' : undefined,
           boxShadow: hasNewPing ? '0 0 0 2px #10b981' : undefined,
         }}
         onClick={() => setIsOpen(!isOpen)}
         title="Audit & Financial Notifications"
         aria-label="Audit Notifications"
       >
-        <Bell size={16} color={unreadCount > 0 ? '#1e293b' : '#64748b'} />
+        <Bell size={17} color={unreadCount > 0 ? 'var(--text-main)' : 'var(--text-muted)'} />
         {unreadCount > 0 && (
           <span
             style={{
               position: 'absolute',
               top: '-4px',
               right: '-4px',
-              backgroundColor: hasNewPing ? '#10b981' : '#ef4444',
+              backgroundColor: hasNewPing ? '#10b981' : '#f43f5e',
               color: '#ffffff',
-              fontSize: '0.68rem',
-              fontWeight: 700,
+              fontSize: '0.65rem',
+              fontWeight: 800,
               minWidth: '18px',
               height: '18px',
               padding: '0 4px',
@@ -298,8 +292,7 @@ export default function NotificationDropdown() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 0 2px #ffffff',
-              animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              boxShadow: '0 0 0 2px var(--bg-card)',
             }}
           >
             {unreadCount > 99 ? '99+' : unreadCount}
@@ -311,51 +304,51 @@ export default function NotificationDropdown() {
         <div
           style={{
             position: 'absolute',
-            top: 'calc(100% + 8px)',
+            top: 'calc(100% + 10px)',
             right: 0,
-            width: '400px',
+            width: '420px',
             maxWidth: '92vw',
-            backgroundColor: '#ffffff',
-            borderRadius: '12px',
-            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08)',
-            border: '1px solid #e2e8f0',
+            backgroundColor: 'var(--bg-card)',
+            borderRadius: '14px',
+            boxShadow: 'var(--shadow-card-hover)',
+            border: '1px solid var(--border-light)',
             zIndex: 100,
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
-            animation: 'fadeInSlide 0.18s ease-out',
+            animation: 'fadeInSlide 0.2s ease-out',
           }}
         >
           {/* Header */}
           <div
             style={{
-              padding: '14px 18px',
-              borderBottom: '1px solid #f1f5f9',
+              padding: '16px 20px',
+              borderBottom: '1px solid var(--border-light)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              backgroundColor: '#ffffff',
+              backgroundColor: 'var(--bg-card)',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div
                 style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '6px',
-                  backgroundColor: '#eff6ff',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  backgroundColor: 'var(--primary-light)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
-                <Bell size={15} color="#2563eb" />
+                <Bell size={16} color="var(--primary)" />
               </div>
               <div>
-                <h4 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 700, color: '#0f172a' }}>
-                  Notifications &amp; Activity
+                <h4 style={{ margin: 0, fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-display)' }}>
+                  Audit &amp; Alerts
                 </h4>
-                <p style={{ margin: 0, fontSize: '0.72rem', color: '#64748b' }}>
+                <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                   {unreadCount} notification{unreadCount !== 1 ? 's' : ''}{' '}
                   {newRecordNotifications.length > 0 &&
                     `(${newRecordNotifications.length} newly added)`}
@@ -368,16 +361,8 @@ export default function NotificationDropdown() {
                 <button
                   onClick={() => notificationService.clearAll()}
                   title="Clear newly added records"
-                  style={{
-                    background: '#f1f5f9',
-                    border: '1px solid #e2e8f0',
-                    borderRadius: '4px',
-                    padding: '3px 8px',
-                    fontSize: '0.68rem',
-                    fontWeight: 600,
-                    color: '#475569',
-                    cursor: 'pointer',
-                  }}
+                  className="btn btn-sm btn-secondary"
+                  style={{ fontSize: '0.68rem', padding: '3px 8px' }}
                 >
                   Clear New
                 </button>
@@ -420,9 +405,9 @@ export default function NotificationDropdown() {
           {/* Filters Bar */}
           <div
             style={{
-              padding: '8px 16px',
-              backgroundColor: '#f8fafc',
-              borderBottom: '1px solid #f1f5f9',
+              padding: '10px 18px',
+              backgroundColor: 'var(--bg-card-hover)',
+              borderBottom: '1px solid var(--border-light)',
               display: 'flex',
               gap: '6px',
               overflowX: 'auto',
@@ -450,11 +435,11 @@ export default function NotificationDropdown() {
                   fontWeight: 600,
                   padding: '4px 10px',
                   borderRadius: '9999px',
-                  border: 'none',
+                  border: '1px solid var(--border-light)',
                   cursor: 'pointer',
-                  backgroundColor: filter === f.id ? '#2563eb' : '#e2e8f0',
-                  color: filter === f.id ? '#ffffff' : '#475569',
-                  transition: 'background-color 0.15s ease',
+                  backgroundColor: filter === f.id ? 'var(--primary)' : 'var(--bg-card)',
+                  color: filter === f.id ? '#ffffff' : 'var(--text-muted)',
+                  transition: 'all 0.15s ease',
                   whiteSpace: 'nowrap',
                 }}
               >
@@ -468,7 +453,8 @@ export default function NotificationDropdown() {
             style={{
               maxHeight: '360px',
               overflowY: 'auto',
-              padding: '6px 8px',
+              padding: '8px 10px',
+              backgroundColor: 'var(--bg-card)',
             }}
           >
             {loading && combinedNotifications.length === 0 ? (
@@ -477,10 +463,10 @@ export default function NotificationDropdown() {
                   padding: '30px 16px',
                   textAlign: 'center',
                   fontSize: '0.8rem',
-                  color: '#64748b',
+                  color: 'var(--text-muted)',
                 }}
               >
-                Checking financial ledger & schedules...
+                Checking financial ledger &amp; schedules...
               </div>
             ) : filteredNotifications.length === 0 ? (
               <div
@@ -494,12 +480,12 @@ export default function NotificationDropdown() {
                 }}
               >
                 <CheckCircle2 size={32} color="#10b981" />
-                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#1e293b' }}>
+                <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-main)', fontFamily: 'var(--font-display)' }}>
                   {filter === 'NEW'
                     ? 'No New Records Added Yet'
                     : 'All Ledgers Reconciled'}
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b', maxWidth: '240px' }}>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', maxWidth: '260px' }}>
                   {filter === 'NEW'
                     ? 'When you create an invoice, expense, or payment, it will immediately appear here.'
                     : 'No overdue invoices, outstanding bills, or pending statutory obligations detected.'}
@@ -510,52 +496,50 @@ export default function NotificationDropdown() {
                 const isNew = item.category === 'NEW';
                 const isOverdue = item.priority === 'HIGH' && !isNew;
                 const iconColor = isNew
-                  ? '#059669'
+                  ? '#10b981'
                   : isOverdue
-                  ? '#ef4444'
+                  ? '#f43f5e'
                   : item.type === 'TAX'
-                  ? '#8b5cf6'
+                  ? '#a855f7'
                   : '#f59e0b';
                 const iconBg = isNew
-                  ? '#ecfdf5'
+                  ? 'rgba(16, 185, 129, 0.12)'
                   : isOverdue
-                  ? '#fef2f2'
+                  ? 'rgba(244, 63, 94, 0.12)'
                   : item.type === 'TAX'
-                  ? '#f5f3ff'
-                  : '#fffbeb';
+                  ? 'rgba(168, 85, 247, 0.12)'
+                  : 'rgba(245, 158, 11, 0.12)';
 
                 return (
                   <div
                     key={item.id}
                     onClick={() => handleItemClick(item)}
                     style={{
-                      padding: '10px 12px',
-                      borderRadius: '8px',
-                      marginBottom: '6px',
+                      padding: '11px 13px',
+                      borderRadius: '10px',
+                      marginBottom: '7px',
                       cursor: 'pointer',
                       display: 'flex',
                       gap: '12px',
                       alignItems: 'flex-start',
-                      transition: 'background-color 0.15s ease',
-                      backgroundColor: isNew ? '#f0fdf4' : '#ffffff',
-                      border: isNew ? '1px solid #bbf7d0' : '1px solid #f1f5f9',
+                      transition: 'all 0.15s ease',
+                      backgroundColor: isNew ? 'rgba(16, 185, 129, 0.08)' : 'var(--bg-card)',
+                      border: isNew ? '1px solid rgba(16, 185, 129, 0.25)' : '1px solid var(--border-light)',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = isNew
-                        ? '#dcfce7'
-                        : '#f8fafc';
+                      e.currentTarget.style.backgroundColor = 'var(--bg-card-hover)';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = isNew
-                        ? '#f0fdf4'
-                        : '#ffffff';
+                        ? 'rgba(16, 185, 129, 0.08)'
+                        : 'var(--bg-card)';
                     }}
                   >
                     <div
                       style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '6px',
+                        width: '34px',
+                        height: '34px',
+                        borderRadius: '8px',
                         backgroundColor: iconBg,
                         display: 'flex',
                         alignItems: 'center',
@@ -577,9 +561,9 @@ export default function NotificationDropdown() {
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div
                         style={{
-                          fontSize: '0.8125rem',
+                          fontSize: '0.82rem',
                           fontWeight: 600,
-                          color: '#0f172a',
+                          color: 'var(--text-main)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
@@ -615,8 +599,8 @@ export default function NotificationDropdown() {
                             <span
                               style={{
                                 fontSize: '0.65rem',
-                                backgroundColor: '#fee2e2',
-                                color: '#991b1b',
+                                backgroundColor: 'rgba(244, 63, 94, 0.18)',
+                                color: '#f43f5e',
                                 padding: '1px 6px',
                                 borderRadius: '4px',
                                 fontWeight: 700,
@@ -636,7 +620,7 @@ export default function NotificationDropdown() {
                               style={{
                                 background: 'transparent',
                                 border: 'none',
-                                color: '#94a3b8',
+                                color: 'var(--text-muted)',
                                 cursor: 'pointer',
                                 padding: '2px',
                                 display: 'flex',
@@ -651,8 +635,8 @@ export default function NotificationDropdown() {
                       <div
                         style={{
                           fontSize: '0.75rem',
-                          color: '#475569',
-                          marginTop: '2px',
+                          color: 'var(--text-muted)',
+                          marginTop: '3px',
                           lineHeight: 1.4,
                         }}
                       >
@@ -662,9 +646,9 @@ export default function NotificationDropdown() {
                         <div
                           style={{
                             fontSize: '0.68rem',
-                            color: '#16a34a',
+                            color: '#10b981',
                             marginTop: '3px',
-                            fontWeight: 500,
+                            fontWeight: 600,
                           }}
                         >
                           Added {formatRelativeTime(item.timestamp)}
@@ -680,16 +664,16 @@ export default function NotificationDropdown() {
           {/* Footer Action */}
           <div
             style={{
-              padding: '10px 16px',
-              backgroundColor: '#f8fafc',
-              borderTop: '1px solid #f1f5f9',
+              padding: '12px 18px',
+              backgroundColor: 'var(--bg-card-hover)',
+              borderTop: '1px solid var(--border-light)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               fontSize: '0.75rem',
             }}
           >
-            <span style={{ color: '#64748b' }}>Live Financial Health Monitor</span>
+            <span style={{ color: 'var(--text-muted)' }}>Enterprise Financial Monitor</span>
             <button
               onClick={() => {
                 setIsOpen(false);
@@ -698,7 +682,7 @@ export default function NotificationDropdown() {
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#2563eb',
+                color: 'var(--primary)',
                 fontWeight: 600,
                 cursor: 'pointer',
                 display: 'flex',

@@ -13,32 +13,33 @@ export default function EmptyState({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '56px 20px',
-        backgroundColor: '#ffffff',
-        border: '1px dashed #cbd5e1',
-        borderRadius: '12px',
+        padding: '64px 24px',
+        backgroundColor: 'var(--bg-card)',
+        border: '1px dashed var(--border-subtle)',
+        borderRadius: 'var(--radius-lg)',
         textAlign: 'center',
+        boxShadow: 'var(--shadow-sm)',
       }}
     >
       <div
         style={{
-          width: '48px',
-          height: '48px',
+          width: '52px',
+          height: '52px',
           borderRadius: '50%',
-          backgroundColor: '#f1f5f9',
+          backgroundColor: 'var(--primary-light)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#64748b',
-          marginBottom: '12px',
+          color: 'var(--primary)',
+          marginBottom: '16px',
         }}
       >
-        <FileQuestion size={24} />
+        <FileQuestion size={26} />
       </div>
-      <h4 style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#1e293b', marginBottom: '4px' }}>
+      <h4 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '6px', fontFamily: 'var(--font-display)' }}>
         {title}
       </h4>
-      <p style={{ fontSize: '0.8125rem', color: '#64748b', maxWidth: '400px', marginBottom: action ? '16px' : '0' }}>
+      <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', maxWidth: '420px', marginBottom: action ? '20px' : '0', lineHeight: 1.5 }}>
         {message}
       </p>
       {action}

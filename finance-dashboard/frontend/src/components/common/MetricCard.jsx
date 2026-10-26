@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 
 export default function MetricCard({
   title,
@@ -14,8 +14,13 @@ export default function MetricCard({
 }) {
   const formattedValue =
     typeof value === 'number'
-      ? `${prefix}${value.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}${suffix}`
+      ? `${prefix}${value.toLocaleString(undefined, {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        })}${suffix}`
       : `${prefix}${value || 0}${suffix}`;
+
+  const hasChange = change !== undefined && change !== null;
 
   return (
     <div className="metric-card">
@@ -23,19 +28,35 @@ export default function MetricCard({
         <span className="metric-title">{title}</span>
         {Icon && (
           <div className={`metric-icon-box icon-${colorScheme}`}>
-            <Icon size={18} />
+            <Icon size={19} />
           </div>
         )}
       </div>
+
       <div className="metric-value">{formattedValue}</div>
+
       <div className="metric-footer">
-        {change !== undefined && change !== null && (
-          <span className={`metric-change ${isPositive ? 'change-positive' : 'change-negative'}`}>
-            {isPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-            {change}%
+        {hasChange && (
+          <span
+            className={`metric-change ${
+              isPositive === true
+                ? 'change-positive'
+                : isPositive === false
+                ? 'change-negative'
+                : 'change-neutral'
+            }`}
+          >
+            {isPositive === true ? (
+              <ArrowUpRight size={13} />
+            ) : isPositive === false ? (
+              <ArrowDownRight size={13} />
+            ) : (
+              <Minus size={13} />
+            )}
+            {typeof change === 'number' ? `${Math.abs(change)}%` : change}
           </span>
         )}
-        <span className="metric-subtext">{subtext}</span>
+        {subtext && <span className="metric-subtext">{subtext}</span>}
       </div>
     </div>
   );
