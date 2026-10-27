@@ -1,8 +1,9 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import { Menu } from 'lucide-react';
 import NotificationDropdown from './NotificationDropdown';
 
-export default function Topbar() {
+export default function Topbar({ onToggleMobileSidebar }) {
   const location = useLocation();
 
   // Format breadcrumb title
@@ -19,11 +20,21 @@ export default function Topbar() {
   return (
     <header className="topbar">
       <div className="topbar-left">
+        <button
+          type="button"
+          className="mobile-menu-toggle-btn"
+          onClick={onToggleMobileSidebar}
+          aria-label="Open Navigation Menu"
+          title="Open Menu"
+        >
+          <Menu size={20} />
+        </button>
+
         <div className="breadcrumb-trail">
-          <span>FinanceHub</span>
-          <span>/</span>
-          <span>Financial Suite</span>
-          <span>/</span>
+          <span className="breadcrumb-hide-mobile">FinanceHub</span>
+          <span className="breadcrumb-hide-mobile">/</span>
+          <span className="breadcrumb-hide-mobile">Financial Suite</span>
+          <span className="breadcrumb-hide-mobile">/</span>
           <span className="breadcrumb-current">{pageTitle}</span>
         </div>
       </div>

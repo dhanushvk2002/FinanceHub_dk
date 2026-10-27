@@ -22,6 +22,7 @@ import {
   Camera,
   LogOut,
   UserCog,
+  X,
 } from 'lucide-react';
 import EditProfileModal from './EditProfileModal';
 
@@ -44,7 +45,7 @@ export const FINANCE_MODULES = [
   { name: 'Cost Structure & Breakeven Analysis', path: '/finance/breakeven', icon: Target },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isMobileOpen = false, onCloseMobile }) {
   const [profile, setProfile] = useState(() => {
     try {
       const saved = localStorage.getItem('financehub_user_profile');
@@ -84,7 +85,7 @@ export default function Sidebar() {
     }
   };
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isMobileOpen ? 'mobile-open' : ''}`}>
       {/* Brand Header */}
       <div className="sidebar-brand">
         <div className="brand-info">
@@ -96,6 +97,15 @@ export default function Sidebar() {
             <span className="brand-tag">Enterprise ERP</span>
           </div>
         </div>
+        <button
+          type="button"
+          className="sidebar-mobile-close-btn"
+          onClick={onCloseMobile}
+          aria-label="Close menu"
+          title="Close Navigation"
+        >
+          <X size={20} />
+        </button>
       </div>
 
       {/* Navigation list */}
@@ -105,6 +115,7 @@ export default function Sidebar() {
           to="/dashboard"
           className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
           title="Executive Dashboard"
+          onClick={() => onCloseMobile?.()}
         >
           <div className="sidebar-link-icon">
             <LayoutDashboard size={18} />
@@ -121,6 +132,7 @@ export default function Sidebar() {
               to={module.path}
               className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
               title={module.name}
+              onClick={() => onCloseMobile?.()}
             >
               <div className="sidebar-link-icon">
                 <Icon size={18} />
