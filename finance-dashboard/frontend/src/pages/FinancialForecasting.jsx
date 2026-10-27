@@ -124,56 +124,58 @@ export default function FinancialForecasting() {
             Forecast Line Item Assumptions &amp; Variance Register
           </span>
         </div>
-        <table className="finance-table">
-          <thead>
-            <tr>
-              <th>Forecast Month</th>
-              <th>Model Title</th>
-              <th className="amount-header">Projected Revenue</th>
-              <th className="amount-header">Actual Revenue</th>
-              <th className="amount-header">Variance</th>
-              <th className="amount-header">Projected OPEX</th>
-              <th className="amount-header">Projected COGS</th>
-              <th className="amount-header">Projected Cash</th>
-              <th>Assumptions / Notes</th>
-              <th style={{ width: 50 }}>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {forecasts.map((f) => {
-              const revVariance = Number(f.actualRevenue) > 0 ? Number(f.actualRevenue) - Number(f.projectedRevenue) : null;
-              return (
-                <tr key={f.id}>
-                  <td style={{ fontWeight: 600, color: '#2563eb' }}>{f.forecastMonth}</td>
-                  <td style={{ fontWeight: 500 }}>{f.modelName}</td>
-                  <td className="amount" style={{ fontWeight: 600 }}>
-                    ${Number(f.projectedRevenue).toLocaleString()}
-                  </td>
-                  <td className="amount">
-                    {Number(f.actualRevenue) > 0 ? `$${Number(f.actualRevenue).toLocaleString()}` : <span style={{ color: '#94a3b8' }}>Pending</span>}
-                  </td>
-                  <td className="amount" style={{ fontWeight: 700, color: revVariance !== null && revVariance >= 0 ? '#16a34a' : '#ef4444' }}>
-                    {revVariance !== null ? `${revVariance >= 0 ? '+' : ''}$${revVariance.toLocaleString()}` : '—'}
-                  </td>
-                  <td className="amount">${Number(f.projectedOpex).toLocaleString()}</td>
-                  <td className="amount">${Number(f.projectedCogs).toLocaleString()}</td>
-                  <td className="amount" style={{ color: '#16a34a', fontWeight: 600 }}>
-                    ${Number(f.projectedCashFlow).toLocaleString()}
-                  </td>
-                  <td style={{ fontSize: '0.8rem', color: '#64748b' }}>{f.assumptions || '—'}</td>
-                  <td>
-                    <button
-                      style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#94a3b8' }}
-                      onClick={() => handleDelete(f.id)}
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="table-scroll">
+          <table className="finance-table">
+            <thead>
+              <tr>
+                <th>Forecast Month</th>
+                <th>Model Title</th>
+                <th className="amount-header">Projected Revenue</th>
+                <th className="amount-header">Actual Revenue</th>
+                <th className="amount-header">Variance</th>
+                <th className="amount-header">Projected OPEX</th>
+                <th className="amount-header">Projected COGS</th>
+                <th className="amount-header">Projected Cash</th>
+                <th>Assumptions / Notes</th>
+                <th style={{ width: 50 }}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {forecasts.map((f) => {
+                const revVariance = Number(f.actualRevenue) > 0 ? Number(f.actualRevenue) - Number(f.projectedRevenue) : null;
+                return (
+                  <tr key={f.id}>
+                    <td style={{ fontWeight: 600, color: '#2563eb' }}>{f.forecastMonth}</td>
+                    <td style={{ fontWeight: 500 }}>{f.modelName}</td>
+                    <td className="amount" style={{ fontWeight: 600 }}>
+                      ${Number(f.projectedRevenue).toLocaleString()}
+                    </td>
+                    <td className="amount">
+                      {Number(f.actualRevenue) > 0 ? `$${Number(f.actualRevenue).toLocaleString()}` : <span style={{ color: '#94a3b8' }}>Pending</span>}
+                    </td>
+                    <td className="amount" style={{ fontWeight: 700, color: revVariance !== null && revVariance >= 0 ? '#16a34a' : '#ef4444' }}>
+                      {revVariance !== null ? `${revVariance >= 0 ? '+' : ''}$${revVariance.toLocaleString()}` : '—'}
+                    </td>
+                    <td className="amount">${Number(f.projectedOpex).toLocaleString()}</td>
+                    <td className="amount">${Number(f.projectedCogs).toLocaleString()}</td>
+                    <td className="amount" style={{ color: '#16a34a', fontWeight: 600 }}>
+                      ${Number(f.projectedCashFlow).toLocaleString()}
+                    </td>
+                    <td style={{ fontSize: '0.8rem', color: '#64748b' }}>{f.assumptions || '—'}</td>
+                    <td>
+                      <button
+                        style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#94a3b8' }}
+                        onClick={() => handleDelete(f.id)}
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Modal */}

@@ -173,63 +173,65 @@ export default function PaymentsSettlement() {
             },
           ]}
         />
-        <table className="finance-table">
-          <thead>
-            <tr>
-              <th>Payment Ref</th>
-              <th>Linked Invoice</th>
-              <th>Method</th>
-              <th>Gateway</th>
-              <th>Settlement Date</th>
-              <th className="amount-header">Gross Amount</th>
-              <th className="amount-header">Gateway Fee</th>
-              <th className="amount-header">Net Settled</th>
-              <th>Reconciliation</th>
-              <th style={{ width: 50 }}>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {payments.map((p) => (
-              <tr key={p.id}>
-                <td style={{ fontWeight: 600, color: '#2563eb' }}>{p.paymentRef}</td>
-                <td>{p.invoiceRef || '—'}</td>
-                <td>
-                  <span className="badge badge-neutral">{p.paymentMethod}</span>
-                </td>
-                <td style={{ fontWeight: 600 }}>{p.gateway}</td>
-                <td>{p.settlementDate || 'Pending'}</td>
-                <td className="amount">${Number(p.grossAmount).toLocaleString()}</td>
-                <td className="amount" style={{ color: '#ef4444' }}>
-                  -${Number(p.gatewayFee).toLocaleString()}
-                </td>
-                <td className="amount" style={{ fontWeight: 700, color: '#16a34a' }}>
-                  ${Number(p.settlementAmount).toLocaleString()}
-                </td>
-                <td>
-                  <span
-                    className={`badge ${
-                      p.reconciliationStatus === 'SETTLED'
-                        ? 'badge-success'
-                        : p.reconciliationStatus === 'PENDING'
-                        ? 'badge-warning'
-                        : 'badge-danger'
-                    }`}
-                  >
-                    {p.reconciliationStatus}
-                  </span>
-                </td>
-                <td>
-                  <button
-                    style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#94a3b8' }}
-                    onClick={() => handleDelete(p.id)}
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </td>
+        <div className="table-scroll">
+          <table className="finance-table">
+            <thead>
+              <tr>
+                <th>Payment Ref</th>
+                <th>Linked Invoice</th>
+                <th>Method</th>
+                <th>Gateway</th>
+                <th>Settlement Date</th>
+                <th className="amount-header">Gross Amount</th>
+                <th className="amount-header">Gateway Fee</th>
+                <th className="amount-header">Net Settled</th>
+                <th>Reconciliation</th>
+                <th style={{ width: 50 }}>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {payments.map((p) => (
+                <tr key={p.id}>
+                  <td style={{ fontWeight: 600, color: '#2563eb' }}>{p.paymentRef}</td>
+                  <td>{p.invoiceRef || '—'}</td>
+                  <td>
+                    <span className="badge badge-neutral">{p.paymentMethod}</span>
+                  </td>
+                  <td style={{ fontWeight: 600 }}>{p.gateway}</td>
+                  <td>{p.settlementDate || 'Pending'}</td>
+                  <td className="amount">${Number(p.grossAmount).toLocaleString()}</td>
+                  <td className="amount" style={{ color: '#ef4444' }}>
+                    -${Number(p.gatewayFee).toLocaleString()}
+                  </td>
+                  <td className="amount" style={{ fontWeight: 700, color: '#16a34a' }}>
+                    ${Number(p.settlementAmount).toLocaleString()}
+                  </td>
+                  <td>
+                    <span
+                      className={`badge ${
+                        p.reconciliationStatus === 'SETTLED'
+                          ? 'badge-success'
+                          : p.reconciliationStatus === 'PENDING'
+                          ? 'badge-warning'
+                          : 'badge-danger'
+                      }`}
+                    >
+                      {p.reconciliationStatus}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#94a3b8' }}
+                      onClick={() => handleDelete(p.id)}
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Modal */}

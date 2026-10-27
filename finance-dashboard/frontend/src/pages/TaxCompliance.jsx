@@ -161,71 +161,80 @@ export default function TaxCompliance() {
             },
           ]}
         />
-        <table className="finance-table">
-          <thead>
-            <tr>
-              <th>Obligation / Tax Form</th>
-              <th>Jurisdiction</th>
-              <th>Period</th>
-              <th>Due Date</th>
-              <th className="amount-header">Assessed Tax</th>
-              <th className="amount-header">Amount Paid</th>
-              <th>Filing Status</th>
-              <th>Statutory Verification</th>
-              <th>Acknowledgement Ref</th>
-              <th style={{ width: 50 }}>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filings.map((f) => (
-              <tr key={f.id}>
-                <td style={{ fontWeight: 600 }}>{f.taxType}</td>
-                <td>{f.jurisdiction}</td>
-                <td>{f.taxPeriod}</td>
-                <td>{f.dueDate}</td>
-                <td className="amount">${Number(f.estimatedTaxAmount).toLocaleString()}</td>
-                <td className="amount" style={{ color: '#16a34a' }}>
-                  ${Number(f.amountPaid).toLocaleString()}
-                </td>
-                <td>
-                  <span
-                    className={`badge ${
-                      f.status === 'FILED' || f.status === 'PAID'
-                        ? 'badge-success'
-                        : f.status === 'OVERDUE'
-                        ? 'badge-danger'
-                        : 'badge-warning'
-                    }`}
-                  >
-                    {f.status}
-                  </span>
-                </td>
-                <td>
-                  <span
-                    className={`badge ${
-                      f.verifiedStatutoryStatus === 'GOVT_ACKNOWLEDGED' || f.verifiedStatutoryStatus === 'AUDITOR_VERIFIED'
-                        ? 'badge-success'
-                        : 'badge-neutral'
-                    }`}
-                  >
-                    {f.verifiedStatutoryStatus}
-                  </span>
-                </td>
-                <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
-                  {f.challanAcknowledgementNo || '—'}
-                </td>
-                <td>
-                  <button
-                    style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#94a3b8' }}
-                    onClick={() => handleDelete(f.id)}
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </td>
+        <div className="table-scroll">
+          <table className="finance-table">
+            <thead>
+              <tr>
+                <th>Obligation / Tax Form</th>
+                <th>Jurisdiction</th>
+                <th>Period</th>
+                <th>Due Date</th>
+                <th className="amount-header">Assessed Tax</th>
+                <th className="amount-header">Amount Paid</th>
+                <th>Filing Status</th>
+                <th>Statutory Verification</th>
+                <th>Acknowledgement Ref</th>
+                <th style={{ width: 50, textAlign: 'center' }}>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filings.map((f) => (
+                <tr key={f.id}>
+                  <td style={{ fontWeight: 600 }}>{f.taxType}</td>
+                  <td>{f.jurisdiction}</td>
+                  <td>{f.taxPeriod}</td>
+                  <td>{f.dueDate}</td>
+                  <td className="amount">${Number(f.estimatedTaxAmount).toLocaleString()}</td>
+                  <td className="amount" style={{ color: '#16a34a' }}>
+                    ${Number(f.amountPaid).toLocaleString()}
+                  </td>
+                  <td>
+                    <span
+                      className={`badge ${
+                        f.status === 'FILED' || f.status === 'PAID'
+                          ? 'badge-success'
+                          : f.status === 'OVERDUE'
+                          ? 'badge-danger'
+                          : 'badge-warning'
+                      }`}
+                    >
+                      {f.status}
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      className={`badge ${
+                        f.verifiedStatutoryStatus === 'GOVT_ACKNOWLEDGED' || f.verifiedStatutoryStatus === 'AUDITOR_VERIFIED'
+                          ? 'badge-success'
+                          : 'badge-neutral'
+                      }`}
+                    >
+                      {f.verifiedStatutoryStatus === 'GOVT_ACKNOWLEDGED'
+                        ? 'Govt Verified'
+                        : f.verifiedStatutoryStatus === 'AUDITOR_VERIFIED'
+                        ? 'Auditor Verified'
+                        : f.verifiedStatutoryStatus === 'SELF_RECORDED'
+                        ? 'Self Recorded'
+                        : f.verifiedStatutoryStatus}
+                    </span>
+                  </td>
+                  <td style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
+                    {f.challanAcknowledgementNo || '—'}
+                  </td>
+                  <td style={{ textAlign: 'center' }}>
+                    <button
+                      style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#94a3b8' }}
+                      onClick={() => handleDelete(f.id)}
+                      title="Delete Filing"
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Modal */}

@@ -41,8 +41,10 @@ export default function NotificationDropdown() {
     notificationService.getRecordNotifications()
   );
   const [hasNewPing, setHasNewPing] = useState(false);
+  const [activeToast, setActiveToast] = useState(null);
   const [filter, setFilter] = useState('ALL'); // ALL, NEW, OVERDUE, UPCOMING, COMPLIANCE
   const dropdownRef = useRef(null);
+  const toastTimeoutRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,6 +53,15 @@ export default function NotificationDropdown() {
         setNewRecordNotifications(notificationService.getRecordNotifications());
         setHasNewPing(true);
         setTimeout(() => setHasNewPing(false), 4000);
+
+        // Pop up the new record notification for exactly 6 seconds
+        if (toastTimeoutRef.current) {
+          clearTimeout(toastTimeoutRef.current);
+        }
+        setActiveToast(e.detail);
+        toastTimeoutRef.current = setTimeout(() => {
+          setActiveToast(null);
+        }, 6000);
       }
     };
     const handleUpdated = () => {
@@ -64,6 +75,7 @@ export default function NotificationDropdown() {
       window.removeEventListener('finance:new-notification', handleNew);
       window.removeEventListener('finance:notifications-updated', handleUpdated);
       window.removeEventListener('storage', handleUpdated);
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
     };
   }, []);
 
@@ -263,28 +275,34 @@ export default function NotificationDropdown() {
   return (
     <div style={{ position: 'relative' }} ref={dropdownRef}>
       <button
-        className="topbar-action-btn"
+        className="btn btn-secondary btn-sm"
         style={{
           position: 'relative',
+          padding: '7px 9px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           cursor: 'pointer',
-          backgroundColor: isOpen ? 'var(--bg-card-hover)' : undefined,
+          backgroundColor: isOpen ? '#f1f5f9' : undefined,
+          borderRadius: '8px',
+          transition: 'all 0.15s ease',
           boxShadow: hasNewPing ? '0 0 0 2px #10b981' : undefined,
         }}
         onClick={() => setIsOpen(!isOpen)}
         title="Audit & Financial Notifications"
         aria-label="Audit Notifications"
       >
-        <Bell size={17} color={unreadCount > 0 ? 'var(--text-main)' : 'var(--text-muted)'} />
+        <Bell size={16} color={unreadCount > 0 ? '#1e293b' : '#64748b'} />
         {unreadCount > 0 && (
           <span
             style={{
               position: 'absolute',
               top: '-4px',
               right: '-4px',
-              backgroundColor: hasNewPing ? '#10b981' : '#f43f5e',
+              backgroundColor: hasNewPing ? '#10b981' : '#ef4444',
               color: '#ffffff',
-              fontSize: '0.65rem',
-              fontWeight: 800,
+              fontSize: '0.68rem',
+              fontWeight: 700,
               minWidth: '18px',
               height: '18px',
               padding: '0 4px',
@@ -292,7 +310,8 @@ export default function NotificationDropdown() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 0 2px var(--bg-card)',
+              boxShadow: '0 0 0 2px #ffffff',
+              animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             }}
           >
             {unreadCount > 99 ? '99+' : unreadCount}
@@ -304,51 +323,51 @@ export default function NotificationDropdown() {
         <div
           style={{
             position: 'absolute',
-            top: 'calc(100% + 10px)',
+            top: 'calc(100% + 8px)',
             right: 0,
-            width: '420px',
+            width: '400px',
             maxWidth: '92vw',
-            backgroundColor: 'var(--bg-card)',
-            borderRadius: '14px',
-            boxShadow: 'var(--shadow-card-hover)',
-            border: '1px solid var(--border-light)',
+            backgroundColor: '#ffffff',
+            borderRadius: '12px',
+            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08)',
+            border: '1px solid #e2e8f0',
             zIndex: 100,
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
-            animation: 'fadeInSlide 0.2s ease-out',
+            animation: 'fadeInSlide 0.18s ease-out',
           }}
         >
           {/* Header */}
           <div
             style={{
-              padding: '16px 20px',
-              borderBottom: '1px solid var(--border-light)',
+              padding: '14px 18px',
+              borderBottom: '1px solid #f1f5f9',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              backgroundColor: 'var(--bg-card)',
+              backgroundColor: '#ffffff',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <div
                 style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '8px',
-                  backgroundColor: 'var(--primary-light)',
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '6px',
+                  backgroundColor: '#eff6ff',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
-                <Bell size={16} color="var(--primary)" />
+                <Bell size={15} color="#2563eb" />
               </div>
               <div>
-                <h4 style={{ margin: 0, fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-display)' }}>
-                  Audit &amp; Alerts
+                <h4 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 700, color: '#0f172a' }}>
+                  Notifications &amp; Activity
                 </h4>
-                <p style={{ margin: 0, fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                <p style={{ margin: 0, fontSize: '0.72rem', color: '#64748b' }}>
                   {unreadCount} notification{unreadCount !== 1 ? 's' : ''}{' '}
                   {newRecordNotifications.length > 0 &&
                     `(${newRecordNotifications.length} newly added)`}
@@ -361,8 +380,16 @@ export default function NotificationDropdown() {
                 <button
                   onClick={() => notificationService.clearAll()}
                   title="Clear newly added records"
-                  className="btn btn-sm btn-secondary"
-                  style={{ fontSize: '0.68rem', padding: '3px 8px' }}
+                  style={{
+                    background: '#f1f5f9',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '4px',
+                    padding: '3px 8px',
+                    fontSize: '0.68rem',
+                    fontWeight: 600,
+                    color: '#475569',
+                    cursor: 'pointer',
+                  }}
                 >
                   Clear New
                 </button>
@@ -405,9 +432,9 @@ export default function NotificationDropdown() {
           {/* Filters Bar */}
           <div
             style={{
-              padding: '10px 18px',
-              backgroundColor: 'var(--bg-card-hover)',
-              borderBottom: '1px solid var(--border-light)',
+              padding: '8px 16px',
+              backgroundColor: '#f8fafc',
+              borderBottom: '1px solid #f1f5f9',
               display: 'flex',
               gap: '6px',
               overflowX: 'auto',
@@ -435,11 +462,11 @@ export default function NotificationDropdown() {
                   fontWeight: 600,
                   padding: '4px 10px',
                   borderRadius: '9999px',
-                  border: '1px solid var(--border-light)',
+                  border: 'none',
                   cursor: 'pointer',
-                  backgroundColor: filter === f.id ? 'var(--primary)' : 'var(--bg-card)',
-                  color: filter === f.id ? '#ffffff' : 'var(--text-muted)',
-                  transition: 'all 0.15s ease',
+                  backgroundColor: filter === f.id ? '#2563eb' : '#e2e8f0',
+                  color: filter === f.id ? '#ffffff' : '#475569',
+                  transition: 'background-color 0.15s ease',
                   whiteSpace: 'nowrap',
                 }}
               >
@@ -453,8 +480,7 @@ export default function NotificationDropdown() {
             style={{
               maxHeight: '360px',
               overflowY: 'auto',
-              padding: '8px 10px',
-              backgroundColor: 'var(--bg-card)',
+              padding: '6px 8px',
             }}
           >
             {loading && combinedNotifications.length === 0 ? (
@@ -463,10 +489,10 @@ export default function NotificationDropdown() {
                   padding: '30px 16px',
                   textAlign: 'center',
                   fontSize: '0.8rem',
-                  color: 'var(--text-muted)',
+                  color: '#64748b',
                 }}
               >
-                Checking financial ledger &amp; schedules...
+                Checking financial ledger & schedules...
               </div>
             ) : filteredNotifications.length === 0 ? (
               <div
@@ -480,12 +506,12 @@ export default function NotificationDropdown() {
                 }}
               >
                 <CheckCircle2 size={32} color="#10b981" />
-                <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-main)', fontFamily: 'var(--font-display)' }}>
+                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#1e293b' }}>
                   {filter === 'NEW'
                     ? 'No New Records Added Yet'
                     : 'All Ledgers Reconciled'}
                 </div>
-                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', maxWidth: '260px' }}>
+                <div style={{ fontSize: '0.75rem', color: '#64748b', maxWidth: '240px' }}>
                   {filter === 'NEW'
                     ? 'When you create an invoice, expense, or payment, it will immediately appear here.'
                     : 'No overdue invoices, outstanding bills, or pending statutory obligations detected.'}
@@ -496,50 +522,52 @@ export default function NotificationDropdown() {
                 const isNew = item.category === 'NEW';
                 const isOverdue = item.priority === 'HIGH' && !isNew;
                 const iconColor = isNew
-                  ? '#10b981'
+                  ? '#059669'
                   : isOverdue
-                  ? '#f43f5e'
+                  ? '#ef4444'
                   : item.type === 'TAX'
-                  ? '#a855f7'
+                  ? '#8b5cf6'
                   : '#f59e0b';
                 const iconBg = isNew
-                  ? 'rgba(16, 185, 129, 0.12)'
+                  ? '#ecfdf5'
                   : isOverdue
-                  ? 'rgba(244, 63, 94, 0.12)'
+                  ? '#fef2f2'
                   : item.type === 'TAX'
-                  ? 'rgba(168, 85, 247, 0.12)'
-                  : 'rgba(245, 158, 11, 0.12)';
+                  ? '#f5f3ff'
+                  : '#fffbeb';
 
                 return (
                   <div
                     key={item.id}
                     onClick={() => handleItemClick(item)}
                     style={{
-                      padding: '11px 13px',
-                      borderRadius: '10px',
-                      marginBottom: '7px',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      marginBottom: '6px',
                       cursor: 'pointer',
                       display: 'flex',
                       gap: '12px',
                       alignItems: 'flex-start',
-                      transition: 'all 0.15s ease',
-                      backgroundColor: isNew ? 'rgba(16, 185, 129, 0.08)' : 'var(--bg-card)',
-                      border: isNew ? '1px solid rgba(16, 185, 129, 0.25)' : '1px solid var(--border-light)',
+                      transition: 'background-color 0.15s ease',
+                      backgroundColor: isNew ? '#f0fdf4' : '#ffffff',
+                      border: isNew ? '1px solid #bbf7d0' : '1px solid #f1f5f9',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'var(--bg-card-hover)';
+                      e.currentTarget.style.backgroundColor = isNew
+                        ? '#dcfce7'
+                        : '#f8fafc';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = isNew
-                        ? 'rgba(16, 185, 129, 0.08)'
-                        : 'var(--bg-card)';
+                        ? '#f0fdf4'
+                        : '#ffffff';
                     }}
                   >
                     <div
                       style={{
-                        width: '34px',
-                        height: '34px',
-                        borderRadius: '8px',
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '6px',
                         backgroundColor: iconBg,
                         display: 'flex',
                         alignItems: 'center',
@@ -561,9 +589,9 @@ export default function NotificationDropdown() {
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div
                         style={{
-                          fontSize: '0.82rem',
+                          fontSize: '0.8125rem',
                           fontWeight: 600,
-                          color: 'var(--text-main)',
+                          color: '#0f172a',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
@@ -599,8 +627,8 @@ export default function NotificationDropdown() {
                             <span
                               style={{
                                 fontSize: '0.65rem',
-                                backgroundColor: 'rgba(244, 63, 94, 0.18)',
-                                color: '#f43f5e',
+                                backgroundColor: '#fee2e2',
+                                color: '#991b1b',
                                 padding: '1px 6px',
                                 borderRadius: '4px',
                                 fontWeight: 700,
@@ -620,7 +648,7 @@ export default function NotificationDropdown() {
                               style={{
                                 background: 'transparent',
                                 border: 'none',
-                                color: 'var(--text-muted)',
+                                color: '#94a3b8',
                                 cursor: 'pointer',
                                 padding: '2px',
                                 display: 'flex',
@@ -635,8 +663,8 @@ export default function NotificationDropdown() {
                       <div
                         style={{
                           fontSize: '0.75rem',
-                          color: 'var(--text-muted)',
-                          marginTop: '3px',
+                          color: '#475569',
+                          marginTop: '2px',
                           lineHeight: 1.4,
                         }}
                       >
@@ -646,9 +674,9 @@ export default function NotificationDropdown() {
                         <div
                           style={{
                             fontSize: '0.68rem',
-                            color: '#10b981',
+                            color: '#16a34a',
                             marginTop: '3px',
-                            fontWeight: 600,
+                            fontWeight: 500,
                           }}
                         >
                           Added {formatRelativeTime(item.timestamp)}
@@ -664,16 +692,16 @@ export default function NotificationDropdown() {
           {/* Footer Action */}
           <div
             style={{
-              padding: '12px 18px',
-              backgroundColor: 'var(--bg-card-hover)',
-              borderTop: '1px solid var(--border-light)',
+              padding: '10px 16px',
+              backgroundColor: '#f8fafc',
+              borderTop: '1px solid #f1f5f9',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               fontSize: '0.75rem',
             }}
           >
-            <span style={{ color: 'var(--text-muted)' }}>Enterprise Financial Monitor</span>
+            <span style={{ color: '#64748b' }}>Live Financial Health Monitor</span>
             <button
               onClick={() => {
                 setIsOpen(false);
@@ -682,7 +710,7 @@ export default function NotificationDropdown() {
               style={{
                 background: 'none',
                 border: 'none',
-                color: 'var(--primary)',
+                color: '#2563eb',
                 fontWeight: 600,
                 cursor: 'pointer',
                 display: 'flex',
@@ -692,6 +720,124 @@ export default function NotificationDropdown() {
               }}
             >
               Statutory Center <ExternalLink size={12} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 6-Second Live New Record Toast Popup */}
+      {activeToast && (
+        <div
+          className="new-record-toast-popup"
+          style={{
+            position: 'fixed',
+            top: '74px',
+            right: '24px',
+            zIndex: 9999,
+            width: '380px',
+            maxWidth: 'calc(100vw - 36px)',
+            backgroundColor: '#ffffff',
+            borderRadius: '12px',
+            boxShadow: '0 16px 36px -4px rgba(15, 23, 42, 0.22), 0 4px 12px -2px rgba(15, 23, 42, 0.08)',
+            border: '1px solid #cbd5e1',
+            overflow: 'hidden',
+            animation: 'toastSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        >
+          {/* 6-second progress bar countdown */}
+          <div
+            style={{
+              height: '3px',
+              backgroundColor: '#10b981',
+              width: '100%',
+              animation: 'progressCountdown 6s linear forwards',
+            }}
+          />
+
+          <div style={{ padding: '12px 14px', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+            <div
+              style={{
+                width: '34px',
+                height: '34px',
+                borderRadius: '8px',
+                backgroundColor: '#dcfce7',
+                color: '#16a34a',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+                marginTop: '1px',
+              }}
+            >
+              <CheckCircle2 size={18} />
+            </div>
+
+            <div
+              style={{ flex: 1, minWidth: 0, cursor: activeToast.route ? 'pointer' : 'default' }}
+              onClick={() => {
+                if (activeToast.route) {
+                  navigate(activeToast.route);
+                }
+                setActiveToast(null);
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+                <span
+                  style={{
+                    fontSize: '0.65rem',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em',
+                    backgroundColor: '#eff6ff',
+                    color: '#2563eb',
+                    padding: '2px 6px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  {activeToast.moduleName || 'New Record'}
+                </span>
+                <span style={{ fontSize: '0.68rem', color: '#64748b' }}>• 6s alert</span>
+              </div>
+              <h4
+                style={{
+                  margin: 0,
+                  fontSize: '0.86rem',
+                  fontWeight: 700,
+                  color: '#0f172a',
+                  lineHeight: 1.3,
+                }}
+              >
+                {activeToast.title}
+              </h4>
+              <p
+                style={{
+                  margin: '3px 0 0',
+                  fontSize: '0.76rem',
+                  color: '#475569',
+                  lineHeight: 1.35,
+                }}
+              >
+                {activeToast.description}
+              </p>
+            </div>
+
+            <button
+              onClick={() => setActiveToast(null)}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                cursor: 'pointer',
+                color: '#94a3b8',
+                padding: '4px',
+                borderRadius: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
+              title="Dismiss alert"
+            >
+              <X size={15} />
             </button>
           </div>
         </div>

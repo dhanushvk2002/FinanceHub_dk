@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 export default function MetricCard({
   title,
@@ -7,20 +7,31 @@ export default function MetricCard({
   change,
   isPositive,
   subtext,
+  subtitle,
   icon: Icon,
   colorScheme = 'blue',
   prefix = '$',
   suffix = '',
 }) {
-  const formattedValue =
-    typeof value === 'number'
-      ? `${prefix}${value.toLocaleString(undefined, {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2,
-        })}${suffix}`
-      : `${prefix}${value || 0}${suffix}`;
+  let formattedValue = value;
+  if (typeof value === 'number') {
+    formattedValue = `${prefix}${value.toLocaleString(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    })}${suffix}`;
+  } else if (typeof value === 'string') {
+    if (value.startsWith('$')) {
+      formattedValue = `${value}${suffix}`;
+    } else if (prefix === '$' && (value.includes('%') || /[a-zA-Z]/.test(value))) {
+      formattedValue = `${value}${suffix}`;
+    } else {
+      formattedValue = `${prefix}${value}${suffix}`;
+    }
+  } else if (value === null || value === undefined) {
+    formattedValue = '—';
+  }
 
-  const hasChange = change !== undefined && change !== null;
+  const displayText = subtext || subtitle;
 
   return (
     <div className="metric-card">
@@ -28,35 +39,19 @@ export default function MetricCard({
         <span className="metric-title">{title}</span>
         {Icon && (
           <div className={`metric-icon-box icon-${colorScheme}`}>
-            <Icon size={19} />
+            <Icon size={18} />
           </div>
         )}
       </div>
-
       <div className="metric-value">{formattedValue}</div>
-
       <div className="metric-footer">
-        {hasChange && (
-          <span
-            className={`metric-change ${
-              isPositive === true
-                ? 'change-positive'
-                : isPositive === false
-                ? 'change-negative'
-                : 'change-neutral'
-            }`}
-          >
-            {isPositive === true ? (
-              <ArrowUpRight size={13} />
-            ) : isPositive === false ? (
-              <ArrowDownRight size={13} />
-            ) : (
-              <Minus size={13} />
-            )}
-            {typeof change === 'number' ? `${Math.abs(change)}%` : change}
+        {change !== undefined && change !== null && (
+          <span className={`metric-change ${isPositive ? 'change-positive' : 'change-negative'}`}>
+            {isPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+            {change}%
           </span>
         )}
-        {subtext && <span className="metric-subtext">{subtext}</span>}
+        {displayText && <span className="metric-subtext">{displayText}</span>}
       </div>
     </div>
   );

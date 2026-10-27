@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
   TrendingUp,
@@ -18,209 +18,180 @@ import {
   ShieldAlert,
   LineChart,
   Target,
-  ChevronLeft,
-  ChevronRight,
   Landmark,
-  Search,
-  X,
-  Sparkles,
+  Camera,
+  LogOut,
+  UserCog,
 } from 'lucide-react';
+import EditProfileModal from './EditProfileModal';
 
-export const FINANCE_SECTIONS = [
-  {
-    category: 'Core Statements',
-    modules: [
-      { name: 'Profit & Loss (P&L)', tag: 'P&L', path: '/finance/profit-loss', icon: TrendingUp },
-      { name: 'Balance Sheet', tag: 'BS', path: '/finance/balance-sheet', icon: Scale },
-      { name: 'Cash Flow & Liquidity', tag: 'CF', path: '/finance/cash-flow', icon: Activity },
-      { name: 'Operating EBITDA', tag: 'EBITDA', path: '/finance/ebitda', icon: GitCommit },
-    ],
-  },
-  {
-    category: 'Revenue & Margins',
-    modules: [
-      { name: 'Revenue Intelligence', tag: 'REV', path: '/finance/revenue', icon: DollarSign },
-      { name: 'Gross Profit & Units', tag: 'GP', path: '/finance/gross-profit', icon: PieChart },
-      { name: 'Cost of Goods (COGS)', tag: 'COGS', path: '/finance/cogs', icon: Boxes },
-      { name: 'Operating Expenses', tag: 'OPEX', path: '/finance/operating-expenses', icon: Receipt },
-    ],
-  },
-  {
-    category: 'Working Capital',
-    modules: [
-      { name: 'Accounts Receivable', tag: 'AR', path: '/finance/accounts-receivable', icon: FileText },
-      { name: 'Accounts Payable', tag: 'AP', path: '/finance/accounts-payable', icon: FileCheck },
-      { name: 'Payments & Settlement', tag: 'PAY', path: '/finance/payments', icon: CreditCard },
-      { name: 'Refunds & Reversals', tag: 'REF', path: '/finance/refunds', icon: RotateCcw },
-    ],
-  },
-  {
-    category: 'Tax & Planning',
-    modules: [
-      { name: 'GST Tax Invoices', tag: 'GST', path: '/finance/gst-invoices', icon: Percent },
-      { name: 'Statutory Compliance', tag: 'TAX', path: '/finance/tax-compliance', icon: ShieldAlert },
-      { name: 'Financial Forecasting', tag: 'FCST', path: '/finance/forecasting', icon: LineChart },
-      { name: 'Breakeven Analysis', tag: 'BEP', path: '/finance/breakeven', icon: Target },
-    ],
-  },
+export const FINANCE_MODULES = [
+  { name: 'Profit & Loss Statement (P&L)', path: '/finance/profit-loss', icon: TrendingUp },
+  { name: 'Balance Sheet & Capital Structure', path: '/finance/balance-sheet', icon: Scale },
+  { name: 'Cash Flow Statement & Liquidity', path: '/finance/cash-flow', icon: Activity },
+  { name: 'Revenue Intelligence & Inflows', path: '/finance/revenue', icon: DollarSign },
+  { name: 'Operating Expenses (OPEX)', path: '/finance/operating-expenses', icon: Receipt },
+  { name: 'Cost of Goods Sold (COGS)', path: '/finance/cogs', icon: Boxes },
+  { name: 'Gross Profit & Unit Economics', path: '/finance/gross-profit', icon: PieChart },
+  { name: 'Operating EBITDA & Bridge', path: '/finance/ebitda', icon: GitCommit },
+  { name: 'Accounts Receivable (AR)', path: '/finance/accounts-receivable', icon: FileText },
+  { name: 'Accounts Payable (AP)', path: '/finance/accounts-payable', icon: FileCheck },
+  { name: 'GST Tax Invoices Register', path: '/finance/gst-invoices', icon: Percent },
+  { name: 'Payments & Gateway Settlement', path: '/finance/payments', icon: CreditCard },
+  { name: 'Refunds & Reversals Ledger', path: '/finance/refunds', icon: RotateCcw },
+  { name: 'Statutory Tax Compliance', path: '/finance/tax-compliance', icon: ShieldAlert },
+  { name: 'Financial Forecasting & Models', path: '/finance/forecasting', icon: LineChart },
+  { name: 'Cost Structure & Breakeven Analysis', path: '/finance/breakeven', icon: Target },
 ];
 
-export default function Sidebar({ isCollapsed, onToggleCollapse }) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const location = useLocation();
+export default function Sidebar() {
+  const [profile, setProfile] = useState(() => {
+    try {
+      const saved = localStorage.getItem('financehub_user_profile');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    const legacyAvatar = localStorage.getItem('financehub_user_avatar');
+    return {
+      displayName: 'CFO',
+      fullName: 'Chief Financial Officer',
+      role: 'Finance Admin • FY26',
+      email: 'cfo@financehub.com',
+      phone: '+91 98765 43210',
+      avatarUrl: legacyAvatar || '/avatar.jpg',
+    };
+  });
+  const [imgError, setImgError] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
-  // Filter 16 modules in real-time
-  const filteredSections = useMemo(() => {
-    if (!searchTerm.trim()) return FINANCE_SECTIONS;
-    const term = searchTerm.toLowerCase().trim();
-    return FINANCE_SECTIONS.map((section) => ({
-      ...section,
-      modules: section.modules.filter(
-        (m) =>
-          m.name.toLowerCase().includes(term) ||
-          m.tag.toLowerCase().includes(term) ||
-          m.path.toLowerCase().includes(term)
-      ),
-    })).filter((section) => section.modules.length > 0);
-  }, [searchTerm]);
+  const handleSaveProfile = (newProfile) => {
+    setProfile(newProfile);
+    setImgError(false);
+    try {
+      localStorage.setItem('financehub_user_profile', JSON.stringify(newProfile));
+      if (newProfile.avatarUrl) {
+        localStorage.setItem('financehub_user_avatar', newProfile.avatarUrl);
+      }
+    } catch (err) {
+      console.warn('Could not save profile to localStorage:', err);
+    }
+  };
 
-  const totalFilteredCount = useMemo(() => {
-    return filteredSections.reduce((acc, sec) => acc + sec.modules.length, 0);
-  }, [filteredSections]);
-
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to log out of FinanceHub?')) {
+      // Clear current session alert and notify
+      alert('You have been logged out successfully.');
+      window.location.reload();
+    }
+  };
   return (
-    <aside
-      className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}
-      aria-label="Main Navigation"
-    >
+    <aside className="sidebar">
       {/* Brand Header */}
       <div className="sidebar-brand">
         <div className="brand-info">
           <div className="brand-logo-icon">
             <Landmark size={20} />
           </div>
-          {!isCollapsed && (
-            <div className="brand-text">
-              <div className="brand-title-wrap">
-                <span className="brand-title">FinanceHub</span>
-                <span className="brand-badge-live">LIVE</span>
-              </div>
-              <span className="brand-tag">Enterprise ERP • 16 Modules</span>
-            </div>
-          )}
-        </div>
-        <button
-          className="sidebar-toggle-btn"
-          onClick={onToggleCollapse}
-          title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-          aria-label={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-        >
-          {isCollapsed ? <ChevronRight size={17} /> : <ChevronLeft size={17} />}
-        </button>
-      </div>
-
-      {/* Module Filter / Search Bar in Sidebar */}
-      {!isCollapsed && (
-        <div className="sidebar-search-container">
-          <div className="sidebar-search-box">
-            <Search size={14} className="sidebar-search-icon" />
-            <input
-              type="text"
-              placeholder="Search 16 modules..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="sidebar-search-input"
-            />
-            {searchTerm && (
-              <button
-                className="sidebar-search-clear"
-                onClick={() => setSearchTerm('')}
-                title="Clear filter"
-              >
-                <X size={12} />
-              </button>
-            )}
+          <div className="brand-text">
+            <span className="brand-title">FinanceHub</span>
+            <span className="brand-tag">Enterprise ERP</span>
           </div>
         </div>
-      )}
+      </div>
 
-      {/* Navigation List */}
+      {/* Navigation list */}
       <nav className="sidebar-nav">
-        {/* Executive Dashboard Link */}
-        {(!searchTerm || 'executive dashboard'.includes(searchTerm.toLowerCase())) && (
-          <div className="sidebar-group">
-            <div className="sidebar-section-title">
-              <span>Overview</span>
-            </div>
+        <div className="sidebar-section-title">Overview</div>
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
+          title="Executive Dashboard"
+        >
+          <div className="sidebar-link-icon">
+            <LayoutDashboard size={18} />
+          </div>
+          <span className="sidebar-link-text">Executive Dashboard</span>
+        </NavLink>
+
+        <div className="sidebar-section-title">16 Finance Submodules</div>
+        {FINANCE_MODULES.map((module) => {
+          const Icon = module.icon;
+          return (
             <NavLink
-              to="/dashboard"
+              key={module.path}
+              to={module.path}
               className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
-              title="Executive Dashboard"
+              title={module.name}
             >
               <div className="sidebar-link-icon">
-                <LayoutDashboard size={18} />
+                <Icon size={18} />
               </div>
-              <span className="sidebar-link-text">Executive Dashboard</span>
-              <span className="module-tag-badge">KPI</span>
+              <span className="sidebar-link-text">{module.name}</span>
             </NavLink>
-          </div>
-        )}
-
-        {/* 16 Finance Submodules Grouped Elegantly */}
-        {filteredSections.map((section) => (
-          <div key={section.category} className="sidebar-group">
-            <div className="sidebar-section-title">
-              <span>{section.category}</span>
-              <span className="section-count">{section.modules.length}</span>
-            </div>
-            {section.modules.map((module) => {
-              const Icon = module.icon;
-              return (
-                <NavLink
-                  key={module.path}
-                  to={module.path}
-                  className={({ isActive }) =>
-                    `sidebar-link ${isActive ? 'active' : ''}`
-                  }
-                  title={`${module.name} (${module.tag})`}
-                >
-                  <div className="sidebar-link-icon">
-                    <Icon size={17} />
-                  </div>
-                  <span className="sidebar-link-text">{module.name}</span>
-                  <span className="module-tag-badge">{module.tag}</span>
-                </NavLink>
-              );
-            })}
-          </div>
-        ))}
-
-        {filteredSections.length === 0 && (
-          <div className="sidebar-empty-search">
-            <p>No modules match "{searchTerm}"</p>
-            <button
-              className="btn btn-sm btn-secondary"
-              onClick={() => setSearchTerm('')}
-            >
-              Reset Search
-            </button>
-          </div>
-        )}
+          );
+        })}
       </nav>
 
-      {/* User Footer / Profile */}
+      {/* User Footer */}
       <div className="sidebar-footer">
-        <div className="user-avatar-wrap">
-          <div className="user-avatar">DV</div>
-          <span className="user-status-dot" title="Online & Synced" />
-        </div>
-        {!isCollapsed && (
-          <div className="user-info">
-            <span className="user-name">Dhanush V</span>
-            <span className="user-role">Finance Lead • Admin</span>
+        <div
+          className="user-avatar-wrapper"
+          onClick={() => setShowProfileModal(true)}
+          title="Click to edit profile"
+        >
+          {profile.avatarUrl && !imgError ? (
+            <img
+              src={profile.avatarUrl}
+              alt={profile.displayName}
+              className="user-avatar-img"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className="user-avatar">{profile.displayName?.slice(0, 3).toUpperCase() || 'CFO'}</div>
+          )}
+          <div className="avatar-edit-overlay" title="Edit Profile">
+            <Camera size={10} />
           </div>
-        )}
+        </div>
+
+        <div
+          className="user-info"
+          onClick={() => setShowProfileModal(true)}
+          style={{ cursor: 'pointer', flex: 1, minWidth: 0 }}
+          title="Click to edit profile"
+        >
+          <span className="user-name">{profile.displayName || 'CFO'}</span>
+          <span className="user-role">{profile.role || 'Finance Admin'}</span>
+        </div>
+
+        <div className="footer-actions">
+          <button
+            type="button"
+            className="footer-action-btn"
+            onClick={() => setShowProfileModal(true)}
+            title="Edit Profile"
+            aria-label="Edit Profile"
+          >
+            <UserCog size={16} />
+          </button>
+          <button
+            type="button"
+            className="footer-action-btn logout-btn"
+            onClick={handleLogout}
+            title="Log Out"
+            aria-label="Log Out"
+          >
+            <LogOut size={16} />
+          </button>
+        </div>
       </div>
+
+      {/* Edit Profile Modal */}
+      <EditProfileModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+        profile={profile}
+        onSave={handleSaveProfile}
+      />
     </aside>
   );
 }

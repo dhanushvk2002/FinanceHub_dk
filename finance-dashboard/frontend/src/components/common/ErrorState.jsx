@@ -13,39 +13,40 @@ export default function ErrorState({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '52px 24px',
-        backgroundColor: 'var(--danger-bg)',
-        border: '1px solid var(--danger-border)',
-        borderRadius: 'var(--radius-lg)',
+        padding: '48px 24px',
+        backgroundColor: '#fef2f2',
+        border: '1px solid #fecaca',
+        borderRadius: '12px',
         margin: '20px 0',
         textAlign: 'center',
       }}
     >
       <div
         style={{
-          width: '50px',
-          height: '50px',
+          width: '48px',
+          height: '48px',
           borderRadius: '50%',
-          backgroundColor: 'rgba(244, 63, 94, 0.2)',
+          backgroundColor: '#fee2e2',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'var(--danger-text)',
-          marginBottom: '16px',
+          color: '#dc2626',
+          marginBottom: '14px',
         }}
       >
         <AlertTriangle size={24} />
       </div>
-      <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--danger-text)', marginBottom: '6px', fontFamily: 'var(--font-display)' }}>
+      <h3 style={{ fontSize: '1rem', fontWeight: 600, color: '#991b1b', marginBottom: '6px' }}>
         {title}
       </h3>
-      <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', maxWidth: '480px', marginBottom: '18px', lineHeight: 1.5 }}>
+      <p style={{ fontSize: '0.84rem', color: '#b91c1c', maxWidth: '480px', marginBottom: '16px' }}>
         {message}
       </p>
       {onRetry && (
         <button
-          className="btn btn-secondary btn-sm"
+          className="btn btn-secondary"
           onClick={onRetry}
+          style={{ borderColor: '#fca5a5' }}
         >
           <RefreshCw size={14} /> Retry Request
         </button>

@@ -62,8 +62,8 @@ export default function DataTable({
 
       {totalPages > 1 && (
         <div className="table-pagination">
-          <span className="pagination-info">
-            Showing <strong>{startIndex + 1}</strong> to <strong>{Math.min(startIndex + rowsPerPage, data.length)}</strong> of <strong>{data.length}</strong> records
+          <span>
+            Showing {startIndex + 1} to {Math.min(startIndex + rowsPerPage, data.length)} of {data.length} records
           </span>
           <div className="pagination-controls">
             <button
@@ -73,8 +73,8 @@ export default function DataTable({
             >
               Previous
             </button>
-            <span className="page-indicator">
-              Page {currentPage} of {totalPages}
+            <span style={{ padding: '4px 8px', fontWeight: 600 }}>
+              {currentPage} / {totalPages}
             </span>
             <button
               className="page-btn"

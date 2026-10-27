@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { GitCommit, Info, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { GitCommit, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { ebitdaService } from '../services/ebitdaService';
 import MetricCard from '../components/common/MetricCard';
 import LoadingState from '../components/common/LoadingState';
@@ -52,27 +52,6 @@ export default function OperatingEBITDA() {
         </div>
       </div>
 
-      {/* Methodology Disclaimer Callout */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: '12px',
-          padding: '16px 20px',
-          borderRadius: '10px',
-          marginBottom: '24px',
-          backgroundColor: '#eff6ff',
-          border: '1px solid #bfdbfe',
-        }}
-      >
-        <Info size={22} color="#2563eb" style={{ flexShrink: 0, marginTop: '2px' }} />
-        <div style={{ fontSize: '0.84rem', color: '#1e3a8a', lineHeight: 1.6 }}>
-          <strong>Statutory Governance Note on EBITDA:</strong> Operating EBITDA is defined as{' '}
-          <code>Gross Profit − Cash OPEX</code>. It excludes non-cash Depreciation &amp; Amortization ($
-          {Number(data.depreciationAndAmortization).toLocaleString()}), financing interest, and income taxes.
-          EBITDA represents operating cash generation potential before capital structure decisions and is not identical to GAAP Net Profit or Operating Cash Flow.
-        </div>
-      </div>
 
       {/* KPI Cards */}
       <div className="grid-3" style={{ marginBottom: '24px' }}>
@@ -114,67 +93,69 @@ export default function OperatingEBITDA() {
             Waterfall explaining movements from baseline to current performance
           </span>
         </div>
-        <table className="finance-table">
-          <thead>
-            <tr>
-              <th>Waterfall Step / Driver Description</th>
-              <th>Impact Nature</th>
-              <th className="amount-header">Delta Value (USD)</th>
-              <th>Variance Context</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.bridgeItems?.map((item, idx) => {
-              const impact = Number(item.impact);
-              return (
-                <tr
-                  key={idx}
-                  style={
-                    item.isSummary
-                      ? { backgroundColor: '#f8fafc', fontWeight: 700 }
-                      : {}
-                  }
-                >
-                  <td style={{ fontWeight: item.isSummary ? 700 : 500 }}>{item.step}</td>
-                  <td>
-                    <span
-                      className={`badge ${
-                        item.type === 'POSITIVE'
-                          ? 'badge-success'
-                          : item.type === 'NEGATIVE'
-                          ? 'badge-danger'
-                          : 'badge-neutral'
-                      }`}
-                    >
-                      {item.type}
-                    </span>
-                  </td>
-                  <td
-                    className="amount"
-                    style={{
-                      color:
-                        item.type === 'POSITIVE'
-                          ? '#16a34a'
-                          : item.type === 'NEGATIVE'
-                          ? '#dc2626'
-                          : '#1e40af',
-                      fontWeight: 700,
-                    }}
+        <div className="table-scroll">
+          <table className="finance-table">
+            <thead>
+              <tr>
+                <th>Waterfall Step / Driver Description</th>
+                <th>Impact Nature</th>
+                <th className="amount-header">Delta Value (USD)</th>
+                <th>Variance Context</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.bridgeItems?.map((item, idx) => {
+                const impact = Number(item.impact);
+                return (
+                  <tr
+                    key={idx}
+                    style={
+                      item.isSummary
+                        ? { backgroundColor: '#f8fafc', fontWeight: 700 }
+                        : {}
+                    }
                   >
-                    {impact > 0 && !item.isSummary ? '+' : ''}${impact.toLocaleString()}
-                  </td>
-                  <td style={{ fontSize: '0.8125rem', color: '#64748b' }}>
-                    {item.isSummary
-                      ? 'Reconciled subtotal benchmark'
-                      : item.type === 'POSITIVE'
-                      ? 'Accretive operating expansion'
-                      : 'Operational headwind / strategic investment'}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                    <td style={{ fontWeight: item.isSummary ? 700 : 500 }}>{item.step}</td>
+                    <td>
+                      <span
+                        className={`badge ${
+                          item.type === 'POSITIVE'
+                            ? 'badge-success'
+                            : item.type === 'NEGATIVE'
+                            ? 'badge-danger'
+                            : 'badge-neutral'
+                        }`}
+                      >
+                        {item.type}
+                      </span>
+                    </td>
+                    <td
+                      className="amount"
+                      style={{
+                        color:
+                          item.type === 'POSITIVE'
+                            ? '#16a34a'
+                            : item.type === 'NEGATIVE'
+                            ? '#dc2626'
+                            : '#1e40af',
+                        fontWeight: 700,
+                      }}
+                    >
+                      {impact > 0 && !item.isSummary ? '+' : ''}${impact.toLocaleString()}
+                    </td>
+                    <td style={{ fontSize: '0.8125rem', color: '#64748b' }}>
+                      {item.isSummary
+                        ? 'Reconciled subtotal benchmark'
+                        : item.type === 'POSITIVE'
+                        ? 'Accretive operating expansion'
+                        : 'Operational headwind / strategic investment'}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

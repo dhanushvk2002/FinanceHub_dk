@@ -174,84 +174,86 @@ export default function AccountsReceivable() {
             },
           ]}
         />
-        <table className="finance-table">
-          <thead>
-            <tr>
-              <th>Invoice #</th>
-              <th>Customer</th>
-              <th>Invoice Date</th>
-              <th>Due Date</th>
-              <th>Aging</th>
-              <th className="amount-header">Total Amount</th>
-              <th className="amount-header">Paid</th>
-              <th className="amount-header">Balance Due</th>
-              <th>Status</th>
-              <th style={{ width: 100 }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoices.map((inv) => (
-              <tr key={inv.id}>
-                <td style={{ fontWeight: 600, color: '#2563eb' }}>{inv.invoiceNumber}</td>
-                <td>
-                  <div style={{ fontWeight: 600 }}>{inv.customerName}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{inv.customerEmail}</div>
-                </td>
-                <td>{inv.invoiceDate}</td>
-                <td>{inv.dueDate}</td>
-                <td>
-                  {Number(inv.overdueDays) > 0 ? (
-                    <span style={{ color: '#dc2626', fontWeight: 600, fontSize: '0.8rem' }}>
-                      {inv.overdueDays}d overdue
-                    </span>
-                  ) : (
-                    <span style={{ color: '#16a34a', fontSize: '0.8rem' }}>Current</span>
-                  )}
-                </td>
-                <td className="amount">${Number(inv.totalAmount).toLocaleString()}</td>
-                <td className="amount" style={{ color: '#16a34a' }}>
-                  ${Number(inv.amountPaid).toLocaleString()}
-                </td>
-                <td className="amount" style={{ fontWeight: 700, color: Number(inv.outstandingBalance) > 0 ? '#ef4444' : '#64748b' }}>
-                  ${Number(inv.outstandingBalance).toLocaleString()}
-                </td>
-                <td>
-                  <span
-                    className={`badge ${
-                      inv.status === 'PAID'
-                        ? 'badge-success'
-                        : inv.status === 'OVERDUE'
-                        ? 'badge-danger'
-                        : 'badge-warning'
-                    }`}
-                  >
-                    {inv.status}
-                  </span>
-                </td>
-                <td>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    {inv.status !== 'PAID' && (
-                      <button
-                        className="btn btn-secondary btn-sm"
-                        style={{ padding: '3px 6px' }}
-                        onClick={() => handleMarkPaid(inv)}
-                        title="Mark Paid"
-                      >
-                        <CheckCircle2 size={13} color="#16a34a" />
-                      </button>
-                    )}
-                    <button
-                      style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#94a3b8' }}
-                      onClick={() => handleDelete(inv.id)}
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                </td>
+        <div className="table-scroll">
+          <table className="finance-table">
+            <thead>
+              <tr>
+                <th>Invoice #</th>
+                <th>Customer</th>
+                <th>Invoice Date</th>
+                <th>Due Date</th>
+                <th>Aging</th>
+                <th className="amount-header">Total Amount</th>
+                <th className="amount-header">Paid</th>
+                <th className="amount-header">Balance Due</th>
+                <th>Status</th>
+                <th style={{ width: 100 }}>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {invoices.map((inv) => (
+                <tr key={inv.id}>
+                  <td style={{ fontWeight: 600, color: '#2563eb' }}>{inv.invoiceNumber}</td>
+                  <td>
+                    <div style={{ fontWeight: 600 }}>{inv.customerName}</div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{inv.customerEmail}</div>
+                  </td>
+                  <td>{inv.invoiceDate}</td>
+                  <td>{inv.dueDate}</td>
+                  <td>
+                    {Number(inv.overdueDays) > 0 ? (
+                      <span style={{ color: '#dc2626', fontWeight: 600, fontSize: '0.8rem' }}>
+                        {inv.overdueDays}d overdue
+                      </span>
+                    ) : (
+                      <span style={{ color: '#16a34a', fontSize: '0.8rem' }}>Current</span>
+                    )}
+                  </td>
+                  <td className="amount">${Number(inv.totalAmount).toLocaleString()}</td>
+                  <td className="amount" style={{ color: '#16a34a' }}>
+                    ${Number(inv.amountPaid).toLocaleString()}
+                  </td>
+                  <td className="amount" style={{ fontWeight: 700, color: Number(inv.outstandingBalance) > 0 ? '#ef4444' : '#64748b' }}>
+                    ${Number(inv.outstandingBalance).toLocaleString()}
+                  </td>
+                  <td>
+                    <span
+                      className={`badge ${
+                        inv.status === 'PAID'
+                          ? 'badge-success'
+                          : inv.status === 'OVERDUE'
+                          ? 'badge-danger'
+                          : 'badge-warning'
+                      }`}
+                    >
+                      {inv.status}
+                    </span>
+                  </td>
+                  <td>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      {inv.status !== 'PAID' && (
+                        <button
+                          className="btn btn-secondary btn-sm"
+                          style={{ padding: '3px 6px' }}
+                          onClick={() => handleMarkPaid(inv)}
+                          title="Mark Paid"
+                        >
+                          <CheckCircle2 size={13} color="#16a34a" />
+                        </button>
+                      )}
+                      <button
+                        style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#94a3b8' }}
+                        onClick={() => handleDelete(inv.id)}
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Add Invoice Modal */}

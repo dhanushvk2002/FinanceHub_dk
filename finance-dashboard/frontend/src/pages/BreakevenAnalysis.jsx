@@ -105,14 +105,15 @@ export default function BreakevenAnalysis() {
         </div>
       </div>
 
-      {/* Metric Cards */}
-      <div className="metrics-grid">
+      {/* Metric Cards - 4 in a single horizontal row */}
+      <div className="grid-4" style={{ marginBottom: '24px' }}>
         <MetricCard
           title="Active Scenario"
           value={activeModel?.model?.modelTitle || 'No Scenario'}
           subtitle={activeModel?.model?.productOrService || 'Define product parameters'}
           icon={Target}
-          trend="neutral"
+          prefix=""
+          colorScheme="blue"
         />
         <MetricCard
           title="Breakeven Production"
@@ -123,18 +124,22 @@ export default function BreakevenAnalysis() {
           }
           subtitle="Zero profit/loss volume"
           icon={Calculator}
-          trend={(activeModel?.feasible ?? activeModel?.isFeasible) ? 'up' : 'down'}
+          prefix=""
+          colorScheme="amber"
+          isPositive={activeModel?.feasible ?? activeModel?.isFeasible}
         />
         <MetricCard
           title="Breakeven Monthly Sales"
           value={
             activeModel?.breakevenRevenue != null
-              ? `$${Number(activeModel.breakevenRevenue).toLocaleString()}`
+              ? Number(activeModel.breakevenRevenue)
               : 'N/A'
           }
           subtitle="Required revenue run-rate"
           icon={TrendingUp}
-          trend="up"
+          prefix="$"
+          colorScheme="blue"
+          isPositive={true}
         />
         <MetricCard
           title="Contribution Margin Ratio"
@@ -149,13 +154,9 @@ export default function BreakevenAnalysis() {
               : 'Profit per unit'
           }
           icon={CheckCircle2}
-          trend={
-            activeModel?.contributionMarginRatio > 30
-              ? 'up'
-              : activeModel?.contributionMarginRatio > 0
-              ? 'neutral'
-              : 'down'
-          }
+          prefix=""
+          colorScheme="emerald"
+          isPositive={activeModel?.contributionMarginRatio > 0}
         />
       </div>
 
