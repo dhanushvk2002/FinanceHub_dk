@@ -90,11 +90,15 @@ export default function Sidebar({ isMobileOpen = false, onCloseMobile }) {
       <div className="sidebar-brand">
         <div className="brand-info">
           <div className="brand-logo-icon">
-            <Landmark size={20} />
+            <img
+              src="/financehub-gold-logo.jpg"
+              alt="FinanceHub Gold Logo"
+              className="brand-logo-img"
+            />
           </div>
           <div className="brand-text">
             <span className="brand-title">FinanceHub</span>
-            <span className="brand-tag">Enterprise ERP</span>
+            <span className="brand-tag">Executive Suite</span>
           </div>
         </div>
         <button
@@ -141,6 +145,25 @@ export default function Sidebar({ isMobileOpen = false, onCloseMobile }) {
             </NavLink>
           );
         })}
+
+        {/* Zenve AI Sentinel & Companion Dog Card */}
+        <div className="sidebar-mascot-card">
+          <div className="mascot-img-container">
+            <img
+              src="/sidebar-mascot.jpg"
+              alt="Zenve Executive Sentinel"
+              className="mascot-img"
+            />
+            <div className="mascot-status-pill">
+              <span className="mascot-status-dot" />
+              <span>Guardian Active</span>
+            </div>
+          </div>
+          <div className="mascot-info">
+            <div className="mascot-name">Zenve Sentinel</div>
+            <div className="mascot-desc">AI Risk &amp; Ledger Watchdog</div>
+          </div>
+        </div>
       </nav>
 
       {/* User Footer */}

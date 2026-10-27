@@ -60,7 +60,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onSave }) {
               gap: '18px',
               paddingBottom: '20px',
               marginBottom: '20px',
-              borderBottom: '1px solid #f1f5f9',
+              borderBottom: '1px solid rgba(245, 158, 11, 0.18)',
             }}
           >
             <div
@@ -70,14 +70,15 @@ export default function EditProfileModal({ isOpen, onClose, profile, onSave }) {
                 height: '68px',
                 borderRadius: '50%',
                 flexShrink: 0,
-                backgroundColor: '#1e293b',
+                backgroundColor: '#070b14',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#ffffff',
+                color: '#fef08a',
                 fontWeight: 700,
                 fontSize: '1.25rem',
-                border: '2px solid #e2e8f0',
+                border: '2px solid rgba(245, 158, 11, 0.45)',
+                boxShadow: '0 0 12px rgba(217, 119, 6, 0.25)',
                 overflow: 'hidden',
               }}
             >
@@ -216,7 +217,7 @@ export default function EditProfileModal({ isOpen, onClose, profile, onSave }) {
             </div>
           </div>
 
-          <div className="modal-actions" style={{ borderTop: '1px solid #f1f5f9', paddingTop: '16px', margin: 0 }}>
+          <div className="modal-actions" style={{ borderTop: '1px solid rgba(245, 158, 11, 0.18)', paddingTop: '16px', margin: 0 }}>
             <button type="button" className="btn btn-secondary" onClick={onClose}>
               Cancel
             </button>

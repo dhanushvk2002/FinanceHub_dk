@@ -17,7 +17,7 @@ import {
   Legend,
 } from 'recharts';
 
-const CHART_COLORS = ['#2563eb', '#10b981', '#f59e0b', '#7c3aed', '#ec4899', '#06b6d4'];
+const CHART_COLORS = ['#fbbf24', '#10b981', '#38bdf8', '#c084fc', '#f43f5e', '#d97706'];
 
 const formatCurrencyTick = (value) => {
   if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
@@ -32,23 +32,23 @@ export function RevenueExpenseTrendChart({ data = [] }) {
         <AreaChart data={data} margin={{ top: 10, right: 20, left: 10, bottom: 0 }}>
           <defs>
             <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#2563eb" stopOpacity={0.25} />
-              <stop offset="95%" stopColor="#2563eb" stopOpacity={0.0} />
+              <stop offset="5%" stopColor="#fbbf24" stopOpacity={0.35} />
+              <stop offset="95%" stopColor="#fbbf24" stopOpacity={0.0} />
             </linearGradient>
             <linearGradient id="colorExp" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#ef4444" stopOpacity={0.2} />
+              <stop offset="5%" stopColor="#ef4444" stopOpacity={0.25} />
               <stop offset="95%" stopColor="#ef4444" stopOpacity={0.0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-          <XAxis dataKey="month" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={{ stroke: '#cbd5e1' }} />
-          <YAxis tickFormatter={formatCurrencyTick} tick={{ fill: '#64748b', fontSize: 12 }} axisLine={{ stroke: '#cbd5e1' }} />
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(245, 158, 11, 0.12)" />
+          <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 12 }} axisLine={{ stroke: 'rgba(245, 158, 11, 0.22)' }} />
+          <YAxis tickFormatter={formatCurrencyTick} tick={{ fill: '#94a3b8', fontSize: 12 }} axisLine={{ stroke: 'rgba(245, 158, 11, 0.22)' }} />
           <Tooltip
             formatter={(value, name) => [`$${Number(value).toLocaleString()}`, name]}
-            contentStyle={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px rgba(0,0,0,0.06)' }}
+            contentStyle={{ backgroundColor: '#0d1527', borderRadius: '10px', border: '1px solid rgba(245, 158, 11, 0.35)', boxShadow: '0 8px 24px rgba(0,0,0,0.7)', color: '#f8fafc' }}
           />
           <Legend verticalAlign="top" height={36} iconType="circle" />
-          <Area type="monotone" dataKey="revenue" name="Total Revenue" stroke="#2563eb" strokeWidth={2.5} fillOpacity={1} fill="url(#colorRev)" />
+          <Area type="monotone" dataKey="revenue" name="Total Revenue" stroke="#fbbf24" strokeWidth={2.5} fillOpacity={1} fill="url(#colorRev)" />
           <Area type="monotone" dataKey="expenses" name="Operating Expenses" stroke="#ef4444" strokeWidth={2} fillOpacity={1} fill="url(#colorExp)" />
         </AreaChart>
       </ResponsiveContainer>
@@ -61,16 +61,16 @@ export function CashFlowTrendChart({ data = [] }) {
     <div style={{ width: '100%', height: 320 }}>
       <ResponsiveContainer>
         <BarChart data={data} margin={{ top: 10, right: 20, left: 10, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-          <XAxis dataKey="month" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={{ stroke: '#cbd5e1' }} />
-          <YAxis tickFormatter={formatCurrencyTick} tick={{ fill: '#64748b', fontSize: 12 }} axisLine={{ stroke: '#cbd5e1' }} />
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(245, 158, 11, 0.12)" />
+          <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 12 }} axisLine={{ stroke: 'rgba(245, 158, 11, 0.22)' }} />
+          <YAxis tickFormatter={formatCurrencyTick} tick={{ fill: '#94a3b8', fontSize: 12 }} axisLine={{ stroke: 'rgba(245, 158, 11, 0.22)' }} />
           <Tooltip
             formatter={(value, name) => [`$${Number(value).toLocaleString()}`, name]}
-            contentStyle={{ backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+            contentStyle={{ backgroundColor: '#0d1527', borderRadius: '10px', border: '1px solid rgba(245, 158, 11, 0.35)', color: '#f8fafc' }}
           />
           <Legend verticalAlign="top" height={36} iconType="circle" />
           <Bar dataKey="operating" name="Operating Inflow" fill="#10b981" radius={[4, 4, 0, 0]} />
-          <Bar dataKey="netCashFlow" name="Net Cash Movement" fill="#2563eb" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="netCashFlow" name="Net Cash Movement" fill="#fbbf24" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

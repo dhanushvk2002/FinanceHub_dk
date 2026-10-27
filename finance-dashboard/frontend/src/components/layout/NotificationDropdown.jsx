@@ -292,17 +292,17 @@ export default function NotificationDropdown() {
         title="Audit & Financial Notifications"
         aria-label="Audit Notifications"
       >
-        <Bell size={16} color={unreadCount > 0 ? '#1e293b' : '#64748b'} />
+        <Bell size={16} color={unreadCount > 0 ? '#fbbf24' : '#94a3b8'} />
         {unreadCount > 0 && (
           <span
             style={{
               position: 'absolute',
               top: '-4px',
               right: '-4px',
-              backgroundColor: hasNewPing ? '#10b981' : '#ef4444',
-              color: '#ffffff',
+              backgroundColor: hasNewPing ? '#10b981' : '#f59e0b',
+              color: '#070b14',
               fontSize: '0.68rem',
-              fontWeight: 700,
+              fontWeight: 800,
               minWidth: '18px',
               height: '18px',
               padding: '0 4px',
@@ -310,7 +310,7 @@ export default function NotificationDropdown() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 0 2px #ffffff',
+              boxShadow: '0 0 0 2px #070b14, 0 0 8px rgba(245, 158, 11, 0.5)',
               animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             }}
           >
@@ -327,10 +327,10 @@ export default function NotificationDropdown() {
             right: 0,
             width: '380px',
             maxWidth: 'calc(100vw - 20px)',
-            backgroundColor: '#ffffff',
+            backgroundColor: '#0d1527',
             borderRadius: '12px',
-            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08)',
-            border: '1px solid #e2e8f0',
+            boxShadow: '0 20px 45px rgba(0, 0, 0, 0.85), 0 0 25px rgba(217, 119, 6, 0.15)',
+            border: '1px solid rgba(245, 158, 11, 0.35)',
             zIndex: 100,
             display: 'flex',
             flexDirection: 'column',
@@ -342,11 +342,11 @@ export default function NotificationDropdown() {
           <div
             style={{
               padding: '14px 18px',
-              borderBottom: '1px solid #f1f5f9',
+              borderBottom: '1px solid rgba(245, 158, 11, 0.16)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              backgroundColor: '#ffffff',
+              backgroundColor: '#070b14',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -355,19 +355,20 @@ export default function NotificationDropdown() {
                   width: '28px',
                   height: '28px',
                   borderRadius: '6px',
-                  backgroundColor: '#eff6ff',
+                  backgroundColor: 'rgba(217, 119, 6, 0.2)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  border: '1px solid rgba(245, 158, 11, 0.3)',
                 }}
               >
-                <Bell size={15} color="#2563eb" />
+                <Bell size={15} color="#fbbf24" />
               </div>
               <div>
-                <h4 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 700, color: '#0f172a' }}>
+                <h4 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 700, color: '#fef08a' }}>
                   Notifications &amp; Activity
                 </h4>
-                <p style={{ margin: 0, fontSize: '0.72rem', color: '#64748b' }}>
+                <p style={{ margin: 0, fontSize: '0.72rem', color: '#94a3b8' }}>
                   {unreadCount} notification{unreadCount !== 1 ? 's' : ''}{' '}
                   {newRecordNotifications.length > 0 &&
                     `(${newRecordNotifications.length} newly added)`}
@@ -433,8 +434,8 @@ export default function NotificationDropdown() {
           <div
             style={{
               padding: '8px 16px',
-              backgroundColor: '#f8fafc',
-              borderBottom: '1px solid #f1f5f9',
+              backgroundColor: '#090f1d',
+              borderBottom: '1px solid rgba(245, 158, 11, 0.16)',
               display: 'flex',
               gap: '6px',
               overflowX: 'auto',
@@ -459,13 +460,13 @@ export default function NotificationDropdown() {
                 onClick={() => setFilter(f.id)}
                 style={{
                   fontSize: '0.72rem',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   padding: '4px 10px',
                   borderRadius: '9999px',
                   border: 'none',
                   cursor: 'pointer',
-                  backgroundColor: filter === f.id ? '#2563eb' : '#e2e8f0',
-                  color: filter === f.id ? '#ffffff' : '#475569',
+                  backgroundColor: filter === f.id ? '#d97706' : 'rgba(255, 255, 255, 0.08)',
+                  color: filter === f.id ? '#ffffff' : '#94a3b8',
                   transition: 'background-color 0.15s ease',
                   whiteSpace: 'nowrap',
                 }}
@@ -549,18 +550,18 @@ export default function NotificationDropdown() {
                       gap: '12px',
                       alignItems: 'flex-start',
                       transition: 'background-color 0.15s ease',
-                      backgroundColor: isNew ? '#f0fdf4' : '#ffffff',
-                      border: isNew ? '1px solid #bbf7d0' : '1px solid #f1f5f9',
+                      backgroundColor: isNew ? 'rgba(16, 185, 129, 0.12)' : 'rgba(13, 21, 39, 0.7)',
+                      border: isNew ? '1px solid rgba(16, 185, 129, 0.35)' : '1px solid rgba(245, 158, 11, 0.14)',
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = isNew
-                        ? '#dcfce7'
-                        : '#f8fafc';
+                        ? 'rgba(16, 185, 129, 0.2)'
+                        : 'rgba(245, 158, 11, 0.1)';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = isNew
-                        ? '#f0fdf4'
-                        : '#ffffff';
+                        ? 'rgba(16, 185, 129, 0.12)'
+                        : 'rgba(13, 21, 39, 0.7)';
                     }}
                   >
                     <div
@@ -590,8 +591,8 @@ export default function NotificationDropdown() {
                       <div
                         style={{
                           fontSize: '0.8125rem',
-                          fontWeight: 600,
-                          color: '#0f172a',
+                          fontWeight: 700,
+                          color: '#fef08a',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
@@ -693,15 +694,15 @@ export default function NotificationDropdown() {
           <div
             style={{
               padding: '10px 16px',
-              backgroundColor: '#f8fafc',
-              borderTop: '1px solid #f1f5f9',
+              backgroundColor: '#070b14',
+              borderTop: '1px solid rgba(245, 158, 11, 0.16)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               fontSize: '0.75rem',
             }}
           >
-            <span style={{ color: '#64748b' }}>Live Financial Health Monitor</span>
+            <span style={{ color: '#94a3b8' }}>Live Financial Health Monitor</span>
             <button
               onClick={() => {
                 setIsOpen(false);
@@ -710,8 +711,8 @@ export default function NotificationDropdown() {
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#2563eb',
-                fontWeight: 600,
+                color: '#fbbf24',
+                fontWeight: 700,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -736,10 +737,10 @@ export default function NotificationDropdown() {
             zIndex: 9999,
             width: '380px',
             maxWidth: 'calc(100vw - 36px)',
-            backgroundColor: '#ffffff',
+            backgroundColor: '#0d1527',
             borderRadius: '12px',
-            boxShadow: '0 16px 36px -4px rgba(15, 23, 42, 0.22), 0 4px 12px -2px rgba(15, 23, 42, 0.08)',
-            border: '1px solid #cbd5e1',
+            boxShadow: '0 20px 45px rgba(0, 0, 0, 0.85), 0 0 25px rgba(217, 119, 6, 0.2)',
+            border: '1px solid rgba(245, 158, 11, 0.45)',
             overflow: 'hidden',
             animation: 'toastSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
           }}

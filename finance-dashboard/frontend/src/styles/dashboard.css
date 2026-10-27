@@ -1,20 +1,34 @@
 /* Metric Card */
 .metric-card {
   background-color: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   position: relative;
   overflow: hidden;
 }
 
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent-gold-gradient);
+  opacity: 0.85;
+}
+
 .metric-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg), 0 0 24px rgba(217, 119, 6, 0.14);
+  border-color: var(--border-gold);
 }
 
 .metric-header {
@@ -25,32 +39,33 @@
 }
 
 .metric-title {
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: 0.78rem;
+  font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 
 .metric-icon-box {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.icon-blue { background: #eff6ff; color: #2563eb; }
-.icon-emerald { background: #ecfdf5; color: #059669; }
-.icon-amber { background: #fffbeb; color: #d97706; }
-.icon-purple { background: #f5f3ff; color: #7c3aed; }
-.icon-rose { background: #fff1f2; color: #e11d48; }
+.icon-blue { background: rgba(37, 99, 235, 0.18); color: #60a5fa; border-color: rgba(96, 165, 250, 0.3); }
+.icon-emerald { background: rgba(16, 185, 129, 0.18); color: #34d399; border-color: rgba(52, 211, 153, 0.3); }
+.icon-amber { background: rgba(217, 119, 6, 0.2); color: #fbbf24; border-color: rgba(251, 191, 36, 0.35); }
+.icon-purple { background: rgba(124, 58, 237, 0.18); color: #c084fc; border-color: rgba(192, 132, 252, 0.3); }
+.icon-rose { background: rgba(225, 29, 72, 0.18); color: #fb7185; border-color: rgba(251, 113, 133, 0.3); }
 
 .metric-value {
   font-size: 1.625rem;
-  font-weight: 700;
-  color: var(--text-main);
+  font-weight: 800;
+  color: #f8fafc;
   letter-spacing: -0.02em;
   margin-bottom: 8px;
 }
@@ -66,30 +81,35 @@
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.75rem;
-  padding: 2px 6px;
+  padding: 2px 7px;
   border-radius: 4px;
 }
 
 .change-positive {
   background: var(--success-bg);
-  color: var(--success);
+  color: #34d399;
+  border: 1px solid var(--success-border);
 }
 
 .change-negative {
   background: var(--danger-bg);
-  color: var(--danger);
+  color: #f87171;
+  border: 1px solid var(--danger-border);
 }
 
 .metric-subtext {
   color: var(--text-subtle);
+  font-size: 0.75rem;
 }
 
 /* Topbar */
 .topbar {
   height: 64px;
-  background-color: #ffffff;
+  background-color: rgba(7, 11, 20, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border-light);
   display: flex;
   align-items: center;
@@ -121,8 +141,9 @@
 }
 
 .breadcrumb-current {
-  font-weight: 600;
-  color: var(--text-main);
+  font-weight: 700;
+  color: #fef08a;
+  letter-spacing: -0.01em;
 }
 
 .topbar-right {
@@ -136,12 +157,13 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #ffffff;
+  background: rgba(13, 21, 39, 0.8);
+  backdrop-filter: blur(8px);
   border: 1px solid var(--border-light);
   padding: 6px 12px;
   border-radius: var(--radius-md);
   font-size: 0.8125rem;
-  color: var(--text-main);
+  color: #e2e8f0;
 }
 
 .date-select-input {
@@ -149,8 +171,8 @@
   background: transparent;
   outline: none;
   font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--text-main);
+  font-weight: 600;
+  color: #fef08a;
   cursor: pointer;
 }
 
@@ -168,8 +190,9 @@
 
 .dashboard-section-title {
   font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--text-main);
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.01em;
 }
 
 /* 6-Second Notification Toast Popup */
