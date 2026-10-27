@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Target, Plus, Trash2, Calculator, CheckCircle2, AlertTriangle, TrendingUp } from 'lucide-react';
+import { Target, Plus, Trash2, Calculator, CheckCircle2, AlertTriangle, TrendingUp, Eye, X } from 'lucide-react';
 import { breakevenService } from '../services/breakevenService';
 import MetricCard from '../components/common/MetricCard';
 import LoadingState from '../components/common/LoadingState';
@@ -11,6 +11,7 @@ import { BreakevenCurveChart } from '../components/charts/FinanceCharts';
 export default function BreakevenAnalysis() {
   const [models, setModels] = useState([]);
   const [selectedModel, setSelectedModel] = useState(null);
+  const [viewModalItem, setViewModalItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -297,7 +298,7 @@ export default function BreakevenAnalysis() {
                 <th className="amount-header" style={{ minWidth: '135px' }}>Breakeven Volume</th>
                 <th className="amount-header" style={{ minWidth: '140px' }}>Breakeven Revenue</th>
                 <th style={{ minWidth: '100px', textAlign: 'center' }}>Status</th>
-                <th style={{ width: '75px', minWidth: '75px', textAlign: 'center' }}>Actions</th>
+                <th style={{ width: '96px', minWidth: '96px', textAlign: 'center' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -319,7 +320,17 @@ export default function BreakevenAnalysis() {
                         cursor: 'pointer',
                         transition: 'background-color 0.15s ease',
                       }}
-                      onClick={() => setSelectedModel(item)}
+                      onMouseEnter={(e) => {
+                        if (!isSelected) e.currentTarget.style.backgroundColor = '#f8fafc';
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isSelected) e.currentTarget.style.backgroundColor = 'transparent';
+                      }}
+                      onClick={() => {
+                        setSelectedModel(item);
+                        setViewModalItem(item);
+                      }}
+                      title="Click row to view & inspect scenario details"
                     >
                       <td style={{ verticalAlign: 'middle' }}>
                         <div style={{ fontWeight: 600, color: '#0f172a', fontSize: '0.85rem' }}>
@@ -371,31 +382,63 @@ export default function BreakevenAnalysis() {
                         )}
                       </td>
                       <td style={{ verticalAlign: 'middle', textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>
-                        <button
-                          className="btn-icon text-danger"
-                          title="Delete scenario"
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: '30px',
-                            height: '30px',
-                            borderRadius: '6px',
-                            border: '1px solid #fee2e2',
-                            backgroundColor: '#fff5f5',
-                            cursor: 'pointer',
-                            transition: 'all 0.15s ease',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = '#fee2e2';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = '#fff5f5';
-                          }}
-                          onClick={() => handleDelete(item.model.id)}
-                        >
-                          <Trash2 size={14} color="#ef4444" />
-                        </button>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                          <button
+                            type="button"
+                            className="btn-icon"
+                            title="View scenario details"
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '30px',
+                              height: '30px',
+                              borderRadius: '6px',
+                              border: '1px solid #dbeafe',
+                              backgroundColor: '#eff6ff',
+                              cursor: 'pointer',
+                              transition: 'all 0.15s ease',
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = '#dbeafe';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = '#eff6ff';
+                            }}
+                            onClick={() => {
+                              setSelectedModel(item);
+                              setViewModalItem(item);
+                            }}
+                          >
+                            <Eye size={14} color="#2563eb" />
+                          </button>
+                          <button
+                            type="button"
+                            className="btn-icon text-danger"
+                            title="Delete scenario"
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '30px',
+                              height: '30px',
+                              borderRadius: '6px',
+                              border: '1px solid #fee2e2',
+                              backgroundColor: '#fff5f5',
+                              cursor: 'pointer',
+                              transition: 'all 0.15s ease',
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = '#fee2e2';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = '#fff5f5';
+                            }}
+                            onClick={() => handleDelete(item.model.id)}
+                          >
+                            <Trash2 size={14} color="#ef4444" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -406,14 +449,236 @@ export default function BreakevenAnalysis() {
         </div>
       </div>
 
-      {/* Modal */}
+      {/* View Scenario Details Modal */}
+      {viewModalItem && (
+        <div className="modal-overlay" onClick={() => setViewModalItem(null)}>
+          <div
+            className="modal-content"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: '640px', width: '100%' }}
+          >
+            <div
+              className="modal-header"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '18px 24px',
+                borderBottom: '1px solid #e2e8f0',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '10px',
+                    backgroundColor: '#eff6ff',
+                    color: '#2563eb',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  <Target size={22} />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                    <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: '#0f172a' }}>
+                      {viewModalItem.model.modelTitle}
+                    </h3>
+                    {(viewModalItem.feasible ?? viewModalItem.isFeasible ?? (viewModalItem.breakevenUnits != null && viewModalItem.breakevenUnits > 0)) ? (
+                      <span className="badge badge-success" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <CheckCircle2 size={12} /> Feasible
+                      </span>
+                    ) : (
+                      <span className="badge badge-danger" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <AlertTriangle size={12} /> Infeasible
+                      </span>
+                    )}
+                  </div>
+                  <p style={{ margin: '2px 0 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                    {viewModalItem.model.productOrService}
+                  </p>
+                </div>
+              </div>
+              <button
+                className="modal-close-btn"
+                onClick={() => setViewModalItem(null)}
+                title="Close"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="modal-body" style={{ padding: '20px 24px' }}>
+              {/* Unit Cost & Margin Grid */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2, 1fr)',
+                  gap: '12px',
+                  marginBottom: '18px',
+                }}
+              >
+                <div style={{ backgroundColor: '#f8fafc', padding: '14px 16px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    Selling Price / Unit
+                  </span>
+                  <div style={{ fontSize: '1.35rem', fontWeight: 700, color: '#0f172a', marginTop: '4px' }}>
+                    ${Number(viewModalItem.model.sellingPricePerUnit).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                  </div>
+                  <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Customer billing rate</span>
+                </div>
+
+                <div style={{ backgroundColor: '#f8fafc', padding: '14px 16px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    Variable Cost / Unit
+                  </span>
+                  <div style={{ fontSize: '1.35rem', fontWeight: 700, color: '#ef4444', marginTop: '4px' }}>
+                    ${Number(viewModalItem.model.variableCostPerUnit).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                  </div>
+                  <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Direct incremental COGS</span>
+                </div>
+
+                <div style={{ backgroundColor: '#f8fafc', padding: '14px 16px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    Monthly Fixed Costs
+                  </span>
+                  <div style={{ fontSize: '1.35rem', fontWeight: 700, color: '#475569', marginTop: '4px' }}>
+                    ${Number(viewModalItem.model.monthlyFixedCosts).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                  </div>
+                  <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Rent, payroll, overhead</span>
+                </div>
+
+                <div style={{ backgroundColor: '#ecfdf5', padding: '14px 16px', borderRadius: '10px', border: '1px solid #a7f3d0' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 600, color: '#047857', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    Contribution Margin (CM)
+                  </span>
+                  <div style={{ fontSize: '1.35rem', fontWeight: 700, color: '#059669', marginTop: '4px' }}>
+                    ${Number(viewModalItem.contributionMarginPerUnit).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                  </div>
+                  <span style={{ fontSize: '0.75rem', color: '#047857', fontWeight: 600 }}>
+                    {Number(viewModalItem.contributionMarginRatio).toFixed(1)}% CM Ratio
+                  </span>
+                </div>
+              </div>
+
+              {/* Breakeven Threshold Highlights */}
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+                  color: '#ffffff',
+                  padding: '18px 20px',
+                  borderRadius: '12px',
+                  marginBottom: '18px',
+                  boxShadow: '0 4px 12px rgba(15,23,42,0.15)',
+                }}
+              >
+                <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', color: '#93c5fd', letterSpacing: '0.05em', marginBottom: '8px' }}>
+                  Profitability &amp; Breakeven Thresholds
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                  <div>
+                    <div style={{ fontSize: '0.8rem', color: '#cbd5e1' }}>Required Sales Volume</div>
+                    <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#60a5fa', marginTop: '2px' }}>
+                      {viewModalItem.breakevenUnits != null
+                        ? `${Number(viewModalItem.breakevenUnits).toLocaleString()} units`
+                        : 'Infeasible'}
+                    </div>
+                    <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Volume to reach $0 net profit</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.8rem', color: '#cbd5e1' }}>Required Monthly Revenue</div>
+                    <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#34d399', marginTop: '2px' }}>
+                      {viewModalItem.breakevenRevenue != null
+                        ? `$${Number(viewModalItem.breakevenRevenue).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`
+                        : 'N/A'}
+                    </div>
+                    <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Run-rate to cover all fixed costs</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Formula & Unit Economics Summary */}
+              <div
+                style={{
+                  backgroundColor: '#f8fafc',
+                  padding: '12px 16px',
+                  borderRadius: '8px',
+                  border: '1px solid #e2e8f0',
+                  fontSize: '0.78rem',
+                  color: '#475569',
+                  marginBottom: viewModalItem.model.notes ? '14px' : '0',
+                }}
+              >
+                <div style={{ fontWeight: 600, color: '#1e293b', marginBottom: '4px' }}>
+                  Formula Breakdown:
+                </div>
+                <div>• Contribution Margin = ${Number(viewModalItem.model.sellingPricePerUnit)} - ${Number(viewModalItem.model.variableCostPerUnit)} = <strong>${Number(viewModalItem.contributionMarginPerUnit)}</strong> / unit</div>
+                <div>• Breakeven Units = Fixed Costs (${Number(viewModalItem.model.monthlyFixedCosts).toLocaleString()}) ÷ CM (${Number(viewModalItem.contributionMarginPerUnit)}) = <strong>{Number(viewModalItem.breakevenUnits).toLocaleString()} units</strong></div>
+              </div>
+
+              {/* Strategic Notes if present */}
+              {viewModalItem.model.notes && (
+                <div
+                  style={{
+                    padding: '12px 16px',
+                    backgroundColor: '#eff6ff',
+                    border: '1px solid #bfdbfe',
+                    borderRadius: '8px',
+                    fontSize: '0.8125rem',
+                    color: '#1e40af',
+                    lineHeight: 1.45,
+                  }}
+                >
+                  <strong>Notes &amp; Assumptions:</strong> {viewModalItem.model.notes}
+                </div>
+              )}
+            </div>
+
+            <div
+              className="modal-footer"
+              style={{
+                padding: '14px 24px',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '10px',
+                borderTop: '1px solid #e2e8f0',
+                backgroundColor: '#f8fafc',
+              }}
+            >
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setViewModalItem(null)}
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => {
+                  setSelectedModel(viewModalItem);
+                  setViewModalItem(null);
+                }}
+              >
+                <CheckCircle2 size={16} /> Set as Active Curve
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Modal */}
       {showModal && (
-        <div className="modal-backdrop">
-          <div className="modal-card">
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3 className="modal-title">Create Breakeven Scenario</h3>
-              <button className="modal-close" onClick={() => setShowModal(false)}>
-                &times;
+              <button className="modal-close-btn" onClick={() => setShowModal(false)}>
+                <X size={18} />
               </button>
             </div>
             <form onSubmit={handleCreate}>
@@ -501,7 +766,7 @@ export default function BreakevenAnalysis() {
                   Cancel
                 </button>
                 <button type="submit" className="btn btn-primary">
-                  Compute & Save Model
+                  Compute &amp; Save Model
                 </button>
               </div>
             </form>
